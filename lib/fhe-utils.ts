@@ -33,7 +33,7 @@ export class FHEUtils {
   /**
    * Decrypt a string value (demo implementation)
    * In real implementation, this would use actual FHE decryption
-   * For demo purposes, we'll simulate decryption with sample data
+   * For demo purposes, we'll decode hex-encoded strings from the contract
    */
   static decryptString(encryptedValue: string): string {
     // This is a demo implementation - in real FHE, you'd need the private key
@@ -41,8 +41,23 @@ export class FHEUtils {
       return '';
     }
     
-    // For demo purposes, return sample data based on hash patterns
-    // In a real system, this would be actual FHE decryption
+    // Check if this is a hex-encoded string (starts with 0x and has even length)
+    if (encryptedValue.startsWith('0x') && encryptedValue.length > 2) {
+      try {
+        // Convert hex to bytes
+        const bytes = toBytes(encryptedValue);
+        // Convert bytes to string, removing null bytes
+        const decoded = new TextDecoder('utf-8').decode(bytes).replace(/\0/g, '');
+        // Return the decoded string if it's not empty and contains printable characters or emojis
+        if (decoded.trim().length > 0 && /^[\x20-\x7E\s\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]*$/u.test(decoded)) {
+          return decoded.trim();
+        }
+      } catch (error) {
+        // If decoding fails, fall back to pattern matching
+      }
+    }
+    
+    // Fallback to pattern matching for hash-based data
     const hash = encryptedValue.toLowerCase();
     
     // Sample category names based on common hash patterns
