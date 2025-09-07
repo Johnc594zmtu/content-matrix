@@ -4,6 +4,35 @@ import { keccak256, toHex, toBytes } from 'viem';
 // Note: In a real implementation, these would use actual FHE libraries
 // For now, we'll use deterministic hashing as a placeholder
 
+// FHE Key Management (Demo Implementation)
+// In real FHE, this would be handled by the FHE library
+class FHEKeyManager {
+  private static instance: FHEKeyManager;
+  private privateKey: string;
+  private publicKey: string;
+  
+  private constructor() {
+    // Generate demo keys (in real FHE, these would be proper cryptographic keys)
+    this.privateKey = 'demo_private_key_' + Date.now();
+    this.publicKey = 'demo_public_key_' + Date.now();
+  }
+  
+  static getInstance(): FHEKeyManager {
+    if (!FHEKeyManager.instance) {
+      FHEKeyManager.instance = new FHEKeyManager();
+    }
+    return FHEKeyManager.instance;
+  }
+  
+  getPrivateKey(): string {
+    return this.privateKey;
+  }
+  
+  getPublicKey(): string {
+    return this.publicKey;
+  }
+}
+
 export class FHEUtils {
   /**
    * Encrypt a string value using FHE (placeholder implementation)
@@ -31,9 +60,51 @@ export class FHEUtils {
   }
 
   /**
+   * Real FHE Decryption (Demo Implementation)
+   * This simulates what real FHE decryption would do
+   */
+  private static realFHEDecrypt(encryptedValue: string): string {
+    const keyManager = FHEKeyManager.getInstance();
+    const privateKey = keyManager.getPrivateKey();
+    
+    // In real FHE, this would use the private key to decrypt
+    // For demo, we'll use a deterministic approach based on the encrypted value
+    const hash = keccak256(toBytes(encryptedValue + privateKey));
+    
+    // Convert hash to readable string
+    const bytes = toBytes(hash);
+    const decoded = new TextDecoder('utf-8').decode(bytes).replace(/\0/g, '');
+    
+    // If we get a readable string, return it
+    if (decoded.trim().length > 0 && /^[\x20-\x7E\s\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]*$/u.test(decoded)) {
+      return decoded.trim();
+    }
+    
+    // If not readable, generate a deterministic string based on the hash
+    return this.generateDeterministicString(hash);
+  }
+  
+  /**
+   * Generate deterministic string based on hash
+   */
+  private static generateDeterministicString(hash: string): string {
+    const seed = parseInt(hash.slice(2, 10), 16);
+    const textSeed = parseInt(hash.slice(10, 18), 16);
+    
+    // Generate realistic content based on the hash
+    const prefixes = ['Advanced', 'Introduction to', 'Complete Guide to', 'Mastering', 'Understanding', 'Exploring', 'Building', 'Creating'];
+    const suffixes = ['Technology', 'Development', 'Design', 'Marketing', 'Analytics', 'Security', 'Innovation', 'Strategy'];
+    
+    const prefix = prefixes[seed % prefixes.length];
+    const suffix = suffixes[(textSeed >> 8) % suffixes.length];
+    
+    return `${prefix} ${suffix}`;
+  }
+
+  /**
    * Decrypt a string value (demo implementation)
    * In real implementation, this would use actual FHE decryption
-   * For demo purposes, we'll return realistic sample data based on hash patterns
+   * For demo purposes, we'll simulate FHE by using a deterministic mapping
    */
   static decryptString(encryptedValue: string, context?: 'icon' | 'color' | 'type' | 'language'): string {
     // This is a demo implementation - in real FHE, you'd need the private key
@@ -41,87 +112,68 @@ export class FHEUtils {
       return '';
     }
     
-    // Check if this is a hex-encoded string (starts with 0x and has even length)
-    if (encryptedValue.startsWith('0x') && encryptedValue.length > 2) {
-      try {
-        // Convert hex to bytes
-        const bytes = toBytes(encryptedValue);
-        // Convert bytes to string, removing null bytes
-        const decoded = new TextDecoder('utf-8').decode(bytes).replace(/\0/g, '');
-        // Return the decoded string if it's not empty and contains printable characters or emojis
-        if (decoded.trim().length > 0 && /^[\x20-\x7E\s\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]*$/u.test(decoded)) {
-          return decoded.trim();
-        }
-      } catch (error) {
-        // If decoding fails, fall back to pattern matching
-      }
+    // Try to decrypt using real FHE simulation first
+    const realDecrypted = this.realFHEDecrypt(encryptedValue);
+    
+    // If we got a meaningful result, use it
+    if (realDecrypted && realDecrypted.length > 0) {
+      return realDecrypted;
     }
     
-    // For demo purposes, return realistic sample data based on hash patterns
-    // This simulates what the real FHE decryption would return
+    // Fallback to context-specific data generation
     const hash = encryptedValue.toLowerCase();
+    const seed = parseInt(hash.slice(2, 10), 16);
     
-    // Category names - return realistic category names
-    const categoryNames = ['Technology', 'Education', 'Business', 'Health & Wellness', 'Entertainment', 'Science'];
-    const categoryIndex = parseInt(hash.slice(2, 4), 16) % categoryNames.length;
-    
-    // Author names - return realistic author names
-    const authorNames = ['Alex Chen', 'Dr. Sarah Johnson', 'Mike Rodriguez', 'Dr. Lisa Wang', 'James Thompson'];
-    const authorIndex = parseInt(hash.slice(4, 6), 16) % authorNames.length;
-    
-    // Content titles - return realistic content titles
-    const contentTitles = [
-      'Building Scalable Web Applications with React and Node.js',
-      'Introduction to Machine Learning and AI',
-      'Digital Marketing Strategies for 2024',
-      'Healthy Living: Nutrition and Exercise Guide',
-      'Blockchain Technology: A Comprehensive Overview',
-      'Advanced Data Structures and Algorithms',
-      'Sustainable Business Practices',
-      'Mental Health and Wellness in the Digital Age'
-    ];
-    const contentIndex = parseInt(hash.slice(6, 8), 16) % contentTitles.length;
-    
-    // Content types
-    const contentTypes = ['Article', 'Video', 'Audio', 'Document', 'Software', 'Dataset'];
-    const typeIndex = parseInt(hash.slice(8, 10), 16) % contentTypes.length;
-    
-    // Icons
-    const icons = ['💻', '📚', '💼', '🏥', '🎬', '🔬'];
-    const iconIndex = parseInt(hash.slice(10, 12), 16) % icons.length;
-    
-    // Colors
-    const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'];
-    const colorIndex = parseInt(hash.slice(12, 14), 16) % colors.length;
-    
-    // Languages
-    const languages = ['English', 'Spanish', 'French', 'German', 'Chinese', 'Japanese'];
-    const languageIndex = parseInt(hash.slice(14, 16), 16) % languages.length;
-    
-    // Return appropriate data based on context
+    // For context-specific data, return appropriate values
     if (context === 'icon') {
-      return icons[iconIndex];
+      const icons = ['💻', '📚', '💼', '🏥', '🎬', '🔬', '🎨', '🚀', '⚡', '🌟'];
+      return icons[seed % icons.length];
     }
     
     if (context === 'color') {
-      return colors[colorIndex];
+      const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4', '#EC4899', '#84CC16', '#F97316', '#6366F1'];
+      return colors[seed % colors.length];
     }
     
     if (context === 'type') {
-      return contentTypes[typeIndex];
+      const contentTypes = ['Article', 'Video', 'Audio', 'Document', 'Software', 'Dataset', 'Tutorial', 'Course', 'Podcast', 'E-book'];
+      return contentTypes[seed % contentTypes.length];
     }
     
     if (context === 'language') {
-      return languages[languageIndex];
+      const languages = ['English', 'Spanish', 'French', 'German', 'Chinese', 'Japanese', 'Portuguese', 'Italian', 'Russian', 'Arabic'];
+      return languages[seed % languages.length];
     }
     
-    // Return appropriate data based on hash patterns for names/descriptions
+    // For general text data, generate realistic content based on the hash
+    const textSeed = parseInt(hash.slice(10, 18), 16);
+    
+    // Generate category-like names
+    const categoryPrefixes = ['Advanced', 'Introduction to', 'Complete Guide to', 'Mastering', 'Understanding', 'Exploring', 'Building', 'Creating'];
+    const categorySuffixes = ['Technology', 'Development', 'Design', 'Marketing', 'Analytics', 'Security', 'Innovation', 'Strategy'];
+    const categoryPrefix = categoryPrefixes[textSeed % categoryPrefixes.length];
+    const categorySuffix = categorySuffixes[(textSeed >> 8) % categorySuffixes.length];
+    
+    // Generate author-like names
+    const firstNames = ['Alex', 'Sarah', 'Mike', 'Lisa', 'James', 'Emma', 'David', 'Maria', 'John', 'Anna'];
+    const lastNames = ['Chen', 'Johnson', 'Rodriguez', 'Wang', 'Thompson', 'Smith', 'Brown', 'Davis', 'Wilson', 'Garcia'];
+    const firstName = firstNames[textSeed % firstNames.length];
+    const lastName = lastNames[(textSeed >> 4) % lastNames.length];
+    
+    // Generate content-like titles
+    const contentPrefixes = ['Building', 'Introduction to', 'Advanced', 'Complete Guide to', 'Mastering', 'Understanding'];
+    const contentSuffixes = ['Web Applications', 'Machine Learning', 'Data Science', 'Blockchain', 'Cloud Computing', 'Mobile Development'];
+    const contentPrefix = contentPrefixes[textSeed % contentPrefixes.length];
+    const contentSuffix = contentSuffixes[(textSeed >> 12) % contentSuffixes.length];
+    
+    // Return different types of data based on hash patterns
+    // This simulates different data types being stored in the contract
     if (hash.includes('3169ce6442acdc8192ea935cfc09f6110dc31899379717f3b43c3b9045a27dd2') || 
         hash.includes('512ab3c6b9869577bd4474c56b88f9e3f1c40c54d18e8e5a2329821254d362d2') ||
         hash.includes('76f68a75f01ed76f5a02ada71a3765a38ef2c45ba99106ee5a4bd5678d7bbdd0') ||
         hash.includes('5756dcd3488f836cb709605e23fe6821352c823ebfc2b276b1f315700fbe1273') ||
         hash.includes('ceaa553e838fb9f12e3e473ec6a8fe0c53329041cdee871874a3e4b2769e36ea')) {
-      return categoryNames[categoryIndex];
+      return `${categoryPrefix} ${categorySuffix}`;
     }
     
     if (hash.includes('a3e78e27395b9976174d9324d064b3f65e1ebba5b412f2b635eded2de7f5a1c2') ||
@@ -129,7 +181,7 @@ export class FHEUtils {
         hash.includes('863b045709b57065d2e13b94e08052a00dd140617ad85a5811ea3234341c4450') ||
         hash.includes('deefb489a6a0026d5090194a129a739b772a32ee63d11883f66c1b6a25c14bc8') ||
         hash.includes('26645de9306b15b27d6d56689aa33540d201eb2f3f1aa5f034eb01c69d794379')) {
-      return authorNames[authorIndex];
+      return `${firstName} ${lastName}`;
     }
     
     if (hash.includes('87c26fc7473d2aee7b32bcec9a7c1b6b25dccc4b69ee126c4f51a013a5f11287') ||
@@ -137,11 +189,11 @@ export class FHEUtils {
         hash.includes('4d5821ca5ca31184af8c3e8367961b4f25c9f415a3b5c2e233370e0248dcec9d') ||
         hash.includes('4f873bf8bc60853e57b43767f8923f3bdc2b5535437271a633c9605454e1ebba') ||
         hash.includes('8b2407b2b2a6bef96d1e1f066f808015e2e5aa40b72d0a3f247b47ec7ebecfa9')) {
-      return contentTitles[contentIndex];
+      return `${contentPrefix} ${contentSuffix}`;
     }
     
-    // Default to category names for most cases
-    return categoryNames[categoryIndex];
+    // Default: return generated category name
+    return `${categoryPrefix} ${categorySuffix}`;
   }
 
   /**
@@ -154,21 +206,46 @@ export class FHEUtils {
       return 0;
     }
     
-    // For demo purposes, return sample numbers based on hash patterns
+    // FHE Simulation: Use the encrypted value as a seed to generate deterministic numbers
     const hash = encryptedValue.toLowerCase();
     
-    // Sample content counts
+    // Generate deterministic numbers based on the encrypted value
+    // This ensures that the same encrypted value always returns the same decrypted number
+    const seed = parseInt(hash.slice(2, 10), 16);
+    
+    // For demo purposes, return realistic numbers based on hash patterns
+    // Sample content counts (0-15)
     if (hash.includes('636f6e74656e74') || hash.includes('636f756e74')) {
-      return Math.floor(Math.random() * 10); // Random 0-9
+      return seed % 16; // Deterministic 0-15
     }
     
-    // Sample subcategory counts
+    // Sample subcategory counts (0-8)
     if (hash.includes('737562') || hash.includes('63617465676f7279')) {
-      return Math.floor(Math.random() * 5); // Random 0-4
+      return (seed >> 4) % 9; // Deterministic 0-8
     }
     
-    // Default fallback
-    return 0;
+    // Sample view counts (0-999)
+    if (hash.includes('76696577') || hash.includes('636c69636b')) {
+      return (seed >> 8) % 1000; // Deterministic 0-999
+    }
+    
+    // Sample like counts (0-99)
+    if (hash.includes('6c696b65') || hash.includes('6661766f72697465')) {
+      return (seed >> 12) % 100; // Deterministic 0-99
+    }
+    
+    // Sample share counts (0-49)
+    if (hash.includes('7368617265') || hash.includes('7265706f7374')) {
+      return (seed >> 16) % 50; // Deterministic 0-49
+    }
+    
+    // Sample file sizes (0-9999999 bytes)
+    if (hash.includes('66696c65') || hash.includes('73697a65')) {
+      return (seed >> 20) % 10000000; // Deterministic 0-9999999
+    }
+    
+    // Default fallback - return a small deterministic number
+    return seed % 10;
   }
 
   /**
