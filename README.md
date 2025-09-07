@@ -8,6 +8,10 @@ Content Matrix is a privacy-preserving content management platform built with FH
 
 **Experience Content Matrix in action**: [https://content-matrix-navy.vercel.app/](https://content-matrix-navy.vercel.app/)
 
+### 📹 Demo Video
+Watch the complete demo showcasing all features:
+[![Demo Video](https://img.shields.io/badge/📹_Watch_Demo-Video_18MB-green?style=for-the-badge&logo=youtube)](./demo-compressed.mp4)
+
 The live demo showcases:
 - 🔒 **FHE-encrypted content management** with real blockchain data
 - 📊 **Real-time analytics** and content statistics  
