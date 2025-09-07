@@ -35,7 +35,7 @@ export class FHEUtils {
    * In real implementation, this would use actual FHE decryption
    * For demo purposes, we'll return realistic sample data based on hash patterns
    */
-  static decryptString(encryptedValue: string): string {
+  static decryptString(encryptedValue: string, context?: 'icon' | 'color' | 'type' | 'language'): string {
     // This is a demo implementation - in real FHE, you'd need the private key
     if (encryptedValue === '0x0000000000000000000000000000000000000000000000000000000000000000') {
       return '';
@@ -98,7 +98,24 @@ export class FHEUtils {
     const languages = ['English', 'Spanish', 'French', 'German', 'Chinese', 'Japanese'];
     const languageIndex = parseInt(hash.slice(14, 16), 16) % languages.length;
     
-    // Return appropriate data based on context (we'll use a simple heuristic)
+    // Return appropriate data based on context
+    if (context === 'icon') {
+      return icons[iconIndex];
+    }
+    
+    if (context === 'color') {
+      return colors[colorIndex];
+    }
+    
+    if (context === 'type') {
+      return contentTypes[typeIndex];
+    }
+    
+    if (context === 'language') {
+      return languages[languageIndex];
+    }
+    
+    // Return appropriate data based on hash patterns for names/descriptions
     if (hash.includes('3169ce6442acdc8192ea935cfc09f6110dc31899379717f3b43c3b9045a27dd2') || 
         hash.includes('512ab3c6b9869577bd4474c56b88f9e3f1c40c54d18e8e5a2329821254d362d2') ||
         hash.includes('76f68a75f01ed76f5a02ada71a3765a38ef2c45ba99106ee5a4bd5678d7bbdd0') ||
