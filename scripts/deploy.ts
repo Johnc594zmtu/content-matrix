@@ -1,6 +1,7 @@
 import { ethers } from "hardhat";
 import { writeFileSync } from "fs";
 import { join } from "path";
+import hre from "hardhat";
 
 async function main() {
   console.log("🚀 Starting Content Matrix deployment...");
@@ -93,13 +94,13 @@ PRIVATE_KEY=your_private_key_here
       
       console.log("Verifying ContentMatrix...");
       await hre.run("verify:verify", {
-        address: contentMatrix.address,
+        address: await contentMatrix.getAddress(),
         constructorArguments: [deployer.address],
       });
       
       console.log("Verifying ContentProtection...");
       await hre.run("verify:verify", {
-        address: contentProtection.address,
+        address: await contentProtection.getAddress(),
         constructorArguments: [],
       });
       
