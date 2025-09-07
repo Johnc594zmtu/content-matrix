@@ -466,7 +466,7 @@ export function useContentMatrix() {
     platformStats,
     
     // Loading states
-    loading: loading || statsLoading || content0Loading || content1Loading || category0Loading || category1Loading || category2Loading || author0Loading,
+    loading: loading || statsLoading,
     error,
     
     // Connection state
