@@ -17,15 +17,7 @@ const CONTRACT_ABI = [
     "stateMutability": "payable",
     "type": "function"
   },
-  {
-    "inputs": [
-      {"name": "licenseId", "type": "string"}
-    ],
-    "name": "revokeLicense",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
+  // Note: revokeLicense function not available in current contract
 ]
 
 const CONTRACT_ADDRESS = '0x...' // Replace with actual deployed contract address
@@ -118,15 +110,11 @@ export default function LicenseManagement() {
 
   const { writeContract: purchaseLicense, data: purchaseHash } = useWriteContract()
 
-  const { writeContract: revokeLicense, data: revokeHash } = useWriteContract()
-
   const { isLoading: isPurchasing, isSuccess: isLicensePurchased } = useWaitForTransactionReceipt({
     hash: purchaseHash,
   })
 
-  const { isLoading: isRevoking, isSuccess: isLicenseRevoked } = useWaitForTransactionReceipt({
-    hash: revokeHash,
-  })
+  // Note: revokeLicense function not available in current contract ABI
 
   const handlePurchaseLicense = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -152,18 +140,7 @@ export default function LicenseManagement() {
     }
   }
 
-  const handleRevokeLicense = async (licenseId: string) => {
-    try {
-      revokeLicense({
-        address: CONTRACT_ADDRESS as `0x${string}`,
-        abi: CONTRACT_ABI,
-        functionName: 'revokeLicense',
-        args: [licenseId],
-      })
-    } catch (error) {
-      console.error('Error revoking license:', error)
-    }
-  }
+  // Note: revokeLicense function not available in current contract ABI
 
   const handleReset = () => {
     setSelectedContent('')
@@ -378,15 +355,7 @@ export default function LicenseManagement() {
                       License ID: {license.licenseId.substring(0, 30)}...
                     </div>
                     
-                    {license.status === 'ACTIVE' && (
-                      <button
-                        onClick={() => handleRevokeLicense(license.licenseId)}
-                        className="btn-secondary text-sm py-2 px-3"
-                        disabled={isRevoking}
-                      >
-                        {isRevoking ? 'Revoking...' : 'Revoke License'}
-                      </button>
-                    )}
+                    {/* Note: Revoke License functionality not available in current contract */}
                   </div>
                 </div>
               </div>

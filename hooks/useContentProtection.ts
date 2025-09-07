@@ -96,11 +96,7 @@ export function useContentProtection() {
     hash: purchaseLicenseHash 
   });
 
-  // Revoke license
-  const { writeContract: writeRevokeLicense, data: revokeLicenseHash, isPending: isRevokingLicense } = useWriteContract();
-  const { isLoading: isConfirmingRevoke, isSuccess: isLicenseRevoked } = useWaitForTransactionReceipt({ 
-    hash: revokeLicenseHash 
-  });
+  // Note: revokeLicense function not available in current contract ABI
 
   // Process platform statistics
   useEffect(() => {
@@ -180,23 +176,7 @@ export function useContentProtection() {
     }
   };
 
-  // Revoke license function
-  const revokeLicense = async (licenseId: string) => {
-    if (!address) {
-      throw new Error('Wallet not connected');
-    }
-
-    try {
-      await writeRevokeLicense({
-        address: CONTRACT_ADDRESSES.CONTENT_PROTECTION,
-        abi: CONTENT_PROTECTION_ABI,
-        functionName: 'revokeLicense',
-        args: [licenseId],
-      });
-    } catch (err) {
-      throw new Error(err instanceof Error ? err.message : 'Failed to revoke license');
-    }
-  };
+  // Note: revokeLicense function not available in current contract ABI
 
   // Refresh all data
   const refreshData = async () => {
@@ -228,14 +208,13 @@ export function useContentProtection() {
     platformStats,
     
     // Loading states
-    loading: loading || statsLoading || isCreatingContent || isConfirmingCreate || isPurchasingLicense || isConfirmingPurchase || isRevokingLicense || isConfirmingRevoke,
+    loading: loading || statsLoading || isCreatingContent || isConfirmingCreate || isPurchasingLicense || isConfirmingPurchase,
     error,
     isConnected,
     
     // Actions
     createContent,
     purchaseLicense,
-    revokeLicense,
     refreshData,
     
     // Transaction states
@@ -243,7 +222,5 @@ export function useContentProtection() {
     isContentCreated,
     isPurchasingLicense: isPurchasingLicense || isConfirmingPurchase,
     isLicensePurchased,
-    isRevokingLicense: isRevokingLicense || isConfirmingRevoke,
-    isLicenseRevoked,
   };
 }

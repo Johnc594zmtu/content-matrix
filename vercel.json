@@ -1,0 +1,12 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "devCommand": "npm run dev",
+  "env": {
+    "NEXT_PUBLIC_NETWORK_NAME": "sepolia",
+    "NEXT_PUBLIC_CHAIN_ID": "11155111",
+    "NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID": "2ec9743d0d0cd7fb94dee1a7e6d33475"
+  }
+}
