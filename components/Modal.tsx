@@ -40,7 +40,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
       />
       
       {/* Modal */}
-      <div className={`relative ${sizeClasses[size]} w-full transform overflow-hidden rounded-xl bg-gray-800 shadow-xl transition-all`}>
+      <div className={`relative ${sizeClasses[size]} w-full mx-auto transform overflow-hidden rounded-xl bg-gray-800 shadow-xl transition-all`}>
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-700 px-6 py-4">
           <h3 className="text-xl font-semibold text-white">
