@@ -1,44 +1,66 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="8" fill="url(#gradient)"/>
-  
-  <!-- Matrix-style grid pattern -->
-  <g fill="white" opacity="0.9">
-    <!-- Top row -->
-    <rect x="6" y="6" width="4" height="4" rx="1"/>
-    <rect x="12" y="6" width="4" height="4" rx="1"/>
-    <rect x="18" y="6" width="4" height="4" rx="1"/>
-    <rect x="24" y="6" width="2" height="4" rx="1"/>
-    
-    <!-- Second row -->
-    <rect x="4" y="12" width="4" height="4" rx="1"/>
-    <rect x="10" y="12" width="4" height="4" rx="1"/>
-    <rect x="16" y="12" width="4" height="4" rx="1"/>
-    <rect x="22" y="12" width="4" height="4" rx="1"/>
-    
-    <!-- Third row -->
-    <rect x="6" y="18" width="4" height="4" rx="1"/>
-    <rect x="12" y="18" width="4" height="4" rx="1"/>
-    <rect x="18" y="18" width="4" height="4" rx="1"/>
-    <rect x="24" y="18" width="2" height="4" rx="1"/>
-    
-    <!-- Bottom row -->
-    <rect x="4" y="24" width="4" height="2" rx="1"/>
-    <rect x="10" y="24" width="4" height="2" rx="1"/>
-    <rect x="16" y="24" width="4" height="2" rx="1"/>
-    <rect x="22" y="24" width="4" height="2" rx="1"/>
-  </g>
-  
-  <!-- Central lock icon for security -->
-  <g fill="white" opacity="0.8">
-    <rect x="13" y="14" width="6" height="4" rx="1"/>
-    <path d="M14 14V12C14 10.5 15.5 9 17 9C18.5 9 20 10.5 20 12V14" stroke="white" stroke-width="1" fill="none"/>
-  </g>
-  
   <defs>
-    <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#6366F1"/>
-      <stop offset="0.5" stop-color="#8B5CF6"/>
-      <stop offset="1" stop-color="#EC4899"/>
+    <!-- Orange to red gradient -->
+    <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF8C00;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FF6B35;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DC143C;stop-opacity:1" />
     </linearGradient>
+    
+    <!-- Paper shadow -->
+    <filter id="paperShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.2)"/>
+    </filter>
+    
+    <!-- Pencil shadow -->
+    <filter id="pencilShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0.5" dy="1" stdDeviation="0.5" flood-color="rgba(0,0,0,0.3)"/>
+    </filter>
   </defs>
+  
+  <!-- Background with rounded corners -->
+  <rect width="32" height="32" rx="8" fill="url(#backgroundGradient)"/>
+  
+  <!-- Paper/document -->
+  <rect x="6" y="8" width="18" height="22" rx="2" fill="white" filter="url(#paperShadow)"/>
+  
+  <!-- Text lines on paper -->
+  <g fill="#4A4A4A" opacity="0.7">
+    <!-- Line 1 -->
+    <rect x="8" y="12" width="12" height="1" rx="0.5"/>
+    <!-- Line 2 -->
+    <rect x="8" y="14.5" width="14" height="1" rx="0.5"/>
+    <!-- Line 3 -->
+    <rect x="8" y="17" width="10" height="1" rx="0.5"/>
+    <!-- Line 4 -->
+    <rect x="8" y="19.5" width="13" height="1" rx="0.5"/>
+    <!-- Line 5 -->
+    <rect x="8" y="22" width="11" height="1" rx="0.5"/>
+    <!-- Line 6 -->
+    <rect x="8" y="24.5" width="9" height="1" rx="0.5"/>
+  </g>
+  
+  <!-- Pencil -->
+  <g filter="url(#pencilShadow)">
+    <!-- Pencil body (yellow) -->
+    <rect x="18" y="20" width="8" height="2" rx="1" fill="#FFD700" transform="rotate(15 22 21)"/>
+    
+    <!-- Pencil tip (darker yellow) -->
+    <polygon points="26,20 28,21 26,22" fill="#FFA500" transform="rotate(15 22 21)"/>
+    
+    <!-- Graphite tip -->
+    <polygon points="28,20.7 28.5,21 28,21.3" fill="#2C2C2C" transform="rotate(15 22 21)"/>
+    
+    <!-- Silver band -->
+    <rect x="19" y="19.8" width="1.5" height="2.4" rx="0.3" fill="#C0C0C0" transform="rotate(15 22 21)"/>
+    
+    <!-- Pink eraser -->
+    <rect x="18.2" y="19.6" width="1.2" height="2.8" rx="0.6" fill="#FF69B4" transform="rotate(15 22 21)"/>
+    
+    <!-- Eraser metal band -->
+    <rect x="19.2" y="19.7" width="0.3" height="2.6" fill="#A0A0A0" transform="rotate(15 22 21)"/>
+  </g>
+  
+  <!-- Content Matrix branding -->
+  <text x="16" y="6" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="3" font-weight="bold" opacity="0.8">CM</text>
 </svg>
