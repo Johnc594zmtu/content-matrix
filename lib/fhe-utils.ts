@@ -64,41 +64,56 @@ export class FHEUtils {
    * This simulates what real FHE decryption would do
    */
   private static realFHEDecrypt(encryptedValue: string): string {
-    const keyManager = FHEKeyManager.getInstance();
-    const privateKey = keyManager.getPrivateKey();
-    
-    // In real FHE, this would use the private key to decrypt
-    // For demo, we'll use a deterministic approach based on the encrypted value
-    const hash = keccak256(toBytes(encryptedValue + privateKey));
-    
-    // Convert hash to readable string
-    const bytes = toBytes(hash);
-    const decoded = new TextDecoder('utf-8').decode(bytes).replace(/\0/g, '');
-    
-    // If we get a readable string, return it
-    if (decoded.trim().length > 0 && /^[\x20-\x7E\s\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]*$/u.test(decoded)) {
-      return decoded.trim();
+    try {
+      const keyManager = FHEKeyManager.getInstance();
+      const privateKey = keyManager.getPrivateKey();
+      
+      // In real FHE, this would use the private key to decrypt
+      // For demo, we'll use a deterministic approach based on the encrypted value
+      const hash = keccak256(toBytes(encryptedValue + privateKey));
+      
+      // Convert hash to readable string
+      const bytes = toBytes(hash);
+      const decoded = new TextDecoder('utf-8').decode(bytes).replace(/\0/g, '');
+      
+      // If we get a readable string, return it
+      if (decoded.trim().length > 0 && /^[\x20-\x7E\s\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]*$/u.test(decoded)) {
+        return decoded.trim();
+      }
+      
+      // If not readable, generate a deterministic string based on the hash
+      return this.generateDeterministicString(hash);
+    } catch (error) {
+      // If any error occurs, generate a deterministic string based on the encrypted value
+      return this.generateDeterministicString(encryptedValue);
     }
-    
-    // If not readable, generate a deterministic string based on the hash
-    return this.generateDeterministicString(hash);
   }
   
   /**
    * Generate deterministic string based on hash
    */
   private static generateDeterministicString(hash: string): string {
-    const seed = parseInt(hash.slice(2, 10), 16);
-    const textSeed = parseInt(hash.slice(10, 18), 16);
-    
-    // Generate realistic content based on the hash
-    const prefixes = ['Advanced', 'Introduction to', 'Complete Guide to', 'Mastering', 'Understanding', 'Exploring', 'Building', 'Creating'];
-    const suffixes = ['Technology', 'Development', 'Design', 'Marketing', 'Analytics', 'Security', 'Innovation', 'Strategy'];
-    
-    const prefix = prefixes[seed % prefixes.length];
-    const suffix = suffixes[(textSeed >> 8) % suffixes.length];
-    
-    return `${prefix} ${suffix}`;
+    try {
+      // Ensure we have a valid hash
+      if (!hash || hash.length < 10) {
+        return 'Default Content';
+      }
+      
+      const seed = parseInt(hash.slice(2, 10), 16) || 0;
+      const textSeed = parseInt(hash.slice(10, 18), 16) || 0;
+      
+      // Generate realistic content based on the hash
+      const prefixes = ['Advanced', 'Introduction to', 'Complete Guide to', 'Mastering', 'Understanding', 'Exploring', 'Building', 'Creating'];
+      const suffixes = ['Technology', 'Development', 'Design', 'Marketing', 'Analytics', 'Security', 'Innovation', 'Strategy'];
+      
+      const prefix = prefixes[seed % prefixes.length];
+      const suffix = suffixes[(textSeed >> 8) % suffixes.length];
+      
+      return `${prefix} ${suffix}`;
+    } catch (error) {
+      // Fallback to a default string if anything goes wrong
+      return 'Default Content';
+    }
   }
 
   /**
@@ -108,8 +123,8 @@ export class FHEUtils {
    */
   static decryptString(encryptedValue: string, context?: 'icon' | 'color' | 'type' | 'language'): string {
     // This is a demo implementation - in real FHE, you'd need the private key
-    if (encryptedValue === '0x0000000000000000000000000000000000000000000000000000000000000000') {
-      return '';
+    if (!encryptedValue || encryptedValue === '0x0000000000000000000000000000000000000000000000000000000000000000') {
+      return this.getDefaultValue(context);
     }
     
     // Try to decrypt using real FHE simulation first
@@ -122,7 +137,7 @@ export class FHEUtils {
     
     // Fallback to context-specific data generation
     const hash = encryptedValue.toLowerCase();
-    const seed = parseInt(hash.slice(2, 10), 16);
+    const seed = parseInt(hash.slice(2, 10), 16) || 0;
     
     // For context-specific data, return appropriate values
     if (context === 'icon') {
@@ -146,7 +161,7 @@ export class FHEUtils {
     }
     
     // For general text data, generate realistic content based on the hash
-    const textSeed = parseInt(hash.slice(10, 18), 16);
+    const textSeed = parseInt(hash.slice(10, 18), 16) || 0;
     
     // Generate category-like names
     const categoryPrefixes = ['Advanced', 'Introduction to', 'Complete Guide to', 'Mastering', 'Understanding', 'Exploring', 'Building', 'Creating'];
@@ -194,6 +209,24 @@ export class FHEUtils {
     
     // Default: return generated category name
     return `${categoryPrefix} ${categorySuffix}`;
+  }
+  
+  /**
+   * Get default value for different contexts
+   */
+  private static getDefaultValue(context?: 'icon' | 'color' | 'type' | 'language'): string {
+    switch (context) {
+      case 'icon':
+        return '📄';
+      case 'color':
+        return '#6B7280';
+      case 'type':
+        return 'Article';
+      case 'language':
+        return 'English';
+      default:
+        return 'Unknown';
+    }
   }
 
   /**
