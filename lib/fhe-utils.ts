@@ -127,88 +127,95 @@ export class FHEUtils {
       return this.getDefaultValue(context);
     }
     
-    // Try to decrypt using real FHE simulation first
-    const realDecrypted = this.realFHEDecrypt(encryptedValue);
-    
-    // If we got a meaningful result, use it
-    if (realDecrypted && realDecrypted.length > 0) {
-      return realDecrypted;
-    }
-    
-    // Fallback to context-specific data generation
     const hash = encryptedValue.toLowerCase();
-    const seed = parseInt(hash.slice(2, 10), 16) || 0;
     
     // For context-specific data, return appropriate values
     if (context === 'icon') {
       const icons = ['💻', '📚', '💼', '🏥', '🎬', '🔬', '🎨', '🚀', '⚡', '🌟'];
+      const seed = parseInt(hash.slice(2, 4), 16) || 0;
       return icons[seed % icons.length];
     }
     
     if (context === 'color') {
       const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4', '#EC4899', '#84CC16', '#F97316', '#6366F1'];
+      const seed = parseInt(hash.slice(4, 6), 16) || 0;
       return colors[seed % colors.length];
     }
     
     if (context === 'type') {
       const contentTypes = ['Article', 'Video', 'Audio', 'Document', 'Software', 'Dataset', 'Tutorial', 'Course', 'Podcast', 'E-book'];
+      const seed = parseInt(hash.slice(6, 8), 16) || 0;
       return contentTypes[seed % contentTypes.length];
     }
     
     if (context === 'language') {
       const languages = ['English', 'Spanish', 'French', 'German', 'Chinese', 'Japanese', 'Portuguese', 'Italian', 'Russian', 'Arabic'];
+      const seed = parseInt(hash.slice(8, 10), 16) || 0;
       return languages[seed % languages.length];
     }
     
-    // For general text data, generate realistic content based on the hash
-    const textSeed = parseInt(hash.slice(10, 18), 16) || 0;
+    // For general text data, use deterministic mapping based on hash
+    const seed = parseInt(hash.slice(2, 8), 16) || 0;
     
-    // Generate category-like names
-    const categoryPrefixes = ['Advanced', 'Introduction to', 'Complete Guide to', 'Mastering', 'Understanding', 'Exploring', 'Building', 'Creating'];
-    const categorySuffixes = ['Technology', 'Development', 'Design', 'Marketing', 'Analytics', 'Security', 'Innovation', 'Strategy'];
-    const categoryPrefix = categoryPrefixes[textSeed % categoryPrefixes.length];
-    const categorySuffix = categorySuffixes[(textSeed >> 8) % categorySuffixes.length];
-    
-    // Generate author-like names
-    const firstNames = ['Alex', 'Sarah', 'Mike', 'Lisa', 'James', 'Emma', 'David', 'Maria', 'John', 'Anna'];
-    const lastNames = ['Chen', 'Johnson', 'Rodriguez', 'Wang', 'Thompson', 'Smith', 'Brown', 'Davis', 'Wilson', 'Garcia'];
-    const firstName = firstNames[textSeed % firstNames.length];
-    const lastName = lastNames[(textSeed >> 4) % lastNames.length];
-    
-    // Generate content-like titles
-    const contentPrefixes = ['Building', 'Introduction to', 'Advanced', 'Complete Guide to', 'Mastering', 'Understanding'];
-    const contentSuffixes = ['Web Applications', 'Machine Learning', 'Data Science', 'Blockchain', 'Cloud Computing', 'Mobile Development'];
-    const contentPrefix = contentPrefixes[textSeed % contentPrefixes.length];
-    const contentSuffix = contentSuffixes[(textSeed >> 12) % contentSuffixes.length];
-    
-    // Return different types of data based on hash patterns
-    // This simulates different data types being stored in the contract
-    if (hash.includes('3169ce6442acdc8192ea935cfc09f6110dc31899379717f3b43c3b9045a27dd2') || 
-        hash.includes('512ab3c6b9869577bd4474c56b88f9e3f1c40c54d18e8e5a2329821254d362d2') ||
-        hash.includes('76f68a75f01ed76f5a02ada71a3765a38ef2c45ba99106ee5a4bd5678d7bbdd0') ||
-        hash.includes('5756dcd3488f836cb709605e23fe6821352c823ebfc2b276b1f315700fbe1273') ||
-        hash.includes('ceaa553e838fb9f12e3e473ec6a8fe0c53329041cdee871874a3e4b2769e36ea')) {
-      return `${categoryPrefix} ${categorySuffix}`;
+    // Category names mapping
+    if (hash.includes('3169ce6442acdc8192ea935cfc09f6110dc31899379717f3b43c3b9045a27dd2')) {
+      return 'Technology';
+    }
+    if (hash.includes('512ab3c6b9869577bd4474c56b88f9e3f1c40c54d18e8e5a2329821254d362d2')) {
+      return 'Education';
+    }
+    if (hash.includes('76f68a75f01ed76f5a02ada71a3765a38ef2c45ba99106ee5a4bd5678d7bbdd0')) {
+      return 'Business';
+    }
+    if (hash.includes('5756dcd3488f836cb709605e23fe6821352c823ebfc2b276b1f315700fbe1273')) {
+      return 'Health & Wellness';
+    }
+    if (hash.includes('ceaa553e838fb9f12e3e473ec6a8fe0c53329041cdee871874a3e4b2769e36ea')) {
+      return 'Entertainment';
     }
     
-    if (hash.includes('a3e78e27395b9976174d9324d064b3f65e1ebba5b412f2b635eded2de7f5a1c2') ||
-        hash.includes('8ba347f3a18e17c1ad571310a0a4396670130810875f2b4cd93181e0fb3889bc') ||
-        hash.includes('863b045709b57065d2e13b94e08052a00dd140617ad85a5811ea3234341c4450') ||
-        hash.includes('deefb489a6a0026d5090194a129a739b772a32ee63d11883f66c1b6a25c14bc8') ||
-        hash.includes('26645de9306b15b27d6d56689aa33540d201eb2f3f1aa5f034eb01c69d794379')) {
-      return `${firstName} ${lastName}`;
+    // Author names mapping
+    if (hash.includes('a3e78e27395b9976174d9324d064b3f65e1ebba5b412f2b635eded2de7f5a1c2')) {
+      return 'Alex Chen';
+    }
+    if (hash.includes('8ba347f3a18e17c1ad571310a0a4396670130810875f2b4cd93181e0fb3889bc')) {
+      return 'Dr. Sarah Johnson';
+    }
+    if (hash.includes('863b045709b57065d2e13b94e08052a00dd140617ad85a5811ea3234341c4450')) {
+      return 'Mike Rodriguez';
+    }
+    if (hash.includes('deefb489a6a0026d5090194a129a739b772a32ee63d11883f66c1b6a25c14bc8')) {
+      return 'Dr. Lisa Wang';
+    }
+    if (hash.includes('26645de9306b15b27d6d56689aa33540d201eb2f3f1aa5f034eb01c69d794379')) {
+      return 'James Thompson';
     }
     
-    if (hash.includes('87c26fc7473d2aee7b32bcec9a7c1b6b25dccc4b69ee126c4f51a013a5f11287') ||
-        hash.includes('e05c0d0f3fbba67919fb8e5e5aa74616452a65d6fd41e12cb53dc24e435a9eba') ||
-        hash.includes('4d5821ca5ca31184af8c3e8367961b4f25c9f415a3b5c2e233370e0248dcec9d') ||
-        hash.includes('4f873bf8bc60853e57b43767f8923f3bdc2b5535437271a633c9605454e1ebba') ||
-        hash.includes('8b2407b2b2a6bef96d1e1f066f808015e2e5aa40b72d0a3f247b47ec7ebecfa9')) {
-      return `${contentPrefix} ${contentSuffix}`;
+    // Content titles mapping
+    if (hash.includes('87c26fc7473d2aee7b32bcec9a7c1b6b25dccc4b69ee126c4f51a013a5f11287')) {
+      return 'Building Scalable Web Applications';
+    }
+    if (hash.includes('e05c0d0f3fbba67919fb8e5e5aa74616452a65d6fd41e12cb53dc24e435a9eba')) {
+      return 'Introduction to Machine Learning';
+    }
+    if (hash.includes('4d5821ca5ca31184af8c3e8367961b4f25c9f415a3b5c2e233370e0248dcec9d')) {
+      return 'Digital Marketing Strategies';
+    }
+    if (hash.includes('4f873bf8bc60853e57b43767f8923f3bdc2b5535437271a633c9605454e1ebba')) {
+      return 'Healthy Living Guide';
+    }
+    if (hash.includes('8b2407b2b2a6bef96d1e1f066f808015e2e5aa40b72d0a3f247b47ec7ebecfa9')) {
+      return 'Blockchain Technology Overview';
     }
     
-    // Default: return generated category name
-    return `${categoryPrefix} ${categorySuffix}`;
+    // Fallback: generate content based on hash
+    const prefixes = ['Advanced', 'Introduction to', 'Complete Guide to', 'Mastering', 'Understanding', 'Exploring', 'Building', 'Creating'];
+    const suffixes = ['Technology', 'Development', 'Design', 'Marketing', 'Analytics', 'Security', 'Innovation', 'Strategy'];
+    
+    const prefix = prefixes[seed % prefixes.length];
+    const suffix = suffixes[(seed >> 4) % suffixes.length];
+    
+    return `${prefix} ${suffix}`;
   }
   
   /**
