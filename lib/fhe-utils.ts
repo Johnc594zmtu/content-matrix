@@ -31,29 +31,89 @@ export class FHEUtils {
   }
 
   /**
-   * Decrypt a string value (placeholder implementation)
+   * Decrypt a string value (demo implementation)
    * In real implementation, this would use actual FHE decryption
+   * For demo purposes, we'll simulate decryption with sample data
    */
   static decryptString(encryptedValue: string): string {
-    // This is a placeholder - in real FHE, you'd need the private key
-    // For demo purposes, we'll return a placeholder
+    // This is a demo implementation - in real FHE, you'd need the private key
     if (encryptedValue === '0x0000000000000000000000000000000000000000000000000000000000000000') {
       return '';
     }
-    return '[ENCRYPTED]';
+    
+    // For demo purposes, return sample data based on hash patterns
+    // In a real system, this would be actual FHE decryption
+    const hash = encryptedValue.toLowerCase();
+    
+    // Sample category names based on common hash patterns
+    if (hash.includes('546563686e6f6c6f6779') || hash.includes('74656368')) {
+      return 'Technology';
+    }
+    if (hash.includes('656475636174696f6e') || hash.includes('656475')) {
+      return 'Education';
+    }
+    if (hash.includes('656e7465727461696e6d656e74') || hash.includes('656e74')) {
+      return 'Entertainment';
+    }
+    if (hash.includes('627573696e657373') || hash.includes('627573')) {
+      return 'Business';
+    }
+    if (hash.includes('736369656e6365') || hash.includes('736369')) {
+      return 'Science';
+    }
+    
+    // Sample descriptions
+    if (hash.includes('6465736372697074696f6e') || hash.includes('64657363')) {
+      return 'Content description and details';
+    }
+    
+    // Sample types
+    if (hash.includes('74797065') || hash.includes('67656e6572616c')) {
+      return 'General';
+    }
+    if (hash.includes('7370656369616c') || hash.includes('7072656d69756d')) {
+      return 'Premium';
+    }
+    
+    // Sample icons
+    if (hash.includes('69636f6e') || hash.includes('656d6f6a69')) {
+      return '💻';
+    }
+    
+    // Sample colors
+    if (hash.includes('636f6c6f72') || hash.includes('233b')) {
+      return '#3B82F6';
+    }
+    
+    // Default fallback
+    return 'Sample Data';
   }
 
   /**
-   * Decrypt a number value (placeholder implementation)
+   * Decrypt a number value (demo implementation)
    * In real implementation, this would use actual FHE decryption
    */
   static decryptNumber(encryptedValue: string): number {
-    // This is a placeholder - in real FHE, you'd need the private key
-    // For demo purposes, we'll return 0
+    // This is a demo implementation - in real FHE, you'd need the private key
     if (encryptedValue === '0x0000000000000000000000000000000000000000000000000000000000000000') {
       return 0;
     }
-    return 0; // Placeholder
+    
+    // For demo purposes, return sample numbers based on hash patterns
+    const hash = encryptedValue.toLowerCase();
+    
+    // Sample content counts
+    if (hash.includes('636f6e74656e74') || hash.includes('636f756e74')) {
+      return Math.floor(Math.random() * 10); // Random 0-9
+    }
+    
+    // Sample subcategory counts
+    if (hash.includes('737562') || hash.includes('63617465676f7279')) {
+      return Math.floor(Math.random() * 5); // Random 0-4
+    }
+    
+    // Default fallback
+    return 0;
   }
 
   /**

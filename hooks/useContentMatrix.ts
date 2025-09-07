@@ -229,41 +229,92 @@ export function useContentMatrix() {
   useEffect(() => {
     const cats: ContentCategoryData[] = [];
     
-    if (category0 && Array.isArray(category0)) {
+    // For demo purposes, create sample categories since FHE decryption is not implemented
+    const sampleCategories = [
+      {
+        id: 0,
+        name: 'Technology',
+        description: 'Technology related content and innovations',
+        type: 'General',
+        icon: '💻',
+        color: '#3B82F6',
+        contentCount: 0,
+        subcategoryCount: 0,
+        hash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        isActive: true,
+        creationTime: Date.now() - 86400000, // 1 day ago
+        lastUpdated: Date.now() - 3600000, // 1 hour ago
+      },
+      {
+        id: 1,
+        name: 'Education',
+        description: 'Educational content and learning resources',
+        type: 'General',
+        icon: '📚',
+        color: '#10B981',
+        contentCount: 0,
+        subcategoryCount: 0,
+        hash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        isActive: true,
+        creationTime: Date.now() - 172800000, // 2 days ago
+        lastUpdated: Date.now() - 7200000, // 2 hours ago
+      },
+      {
+        id: 2,
+        name: 'Entertainment',
+        description: 'Entertainment and media content',
+        type: 'General',
+        icon: '🎬',
+        color: '#F59E0B',
+        contentCount: 0,
+        subcategoryCount: 0,
+        hash: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        isActive: true,
+        creationTime: Date.now() - 259200000, // 3 days ago
+        lastUpdated: Date.now() - 10800000, // 3 hours ago
+      }
+    ];
+    
+    // If we have real data from contract, use it; otherwise use sample data
+    if (category0 && Array.isArray(category0) && category0.length > 0) {
       cats.push({
         id: 0,
         name: FHEUtils.decryptString(category0[1]) || 'Technology',
-        description: FHEUtils.decryptString(category0[2]) || 'Technology related content',
+        description: FHEUtils.decryptString(category0[2]) || 'Technology related content and innovations',
         type: FHEUtils.decryptString(category0[3]) || 'General',
         icon: FHEUtils.decryptString(category0[4]) || '💻',
         color: FHEUtils.decryptString(category0[5]) || '#3B82F6',
         contentCount: Number(category0[6]) || 0,
         subcategoryCount: Number(category0[7]) || 0,
-        hash: category0[8],
+        hash: category0[8] || '0x0000000000000000000000000000000000000000000000000000000000000000',
         isActive: category0[9] || true,
-        creationTime: Number(category0[10]) || Date.now(),
-        lastUpdated: Number(category0[11]) || Date.now(),
+        creationTime: Number(category0[10]) || Math.floor((Date.now() - 86400000) / 1000),
+        lastUpdated: Number(category0[11]) || Math.floor((Date.now() - 3600000) / 1000),
       });
+    } else {
+      cats.push(sampleCategories[0]);
     }
     
-    if (category1 && Array.isArray(category1)) {
+    if (category1 && Array.isArray(category1) && category1.length > 0) {
       cats.push({
         id: 1,
         name: FHEUtils.decryptString(category1[1]) || 'Education',
-        description: FHEUtils.decryptString(category1[2]) || 'Educational content and resources',
+        description: FHEUtils.decryptString(category1[2]) || 'Educational content and learning resources',
         type: FHEUtils.decryptString(category1[3]) || 'General',
         icon: FHEUtils.decryptString(category1[4]) || '📚',
         color: FHEUtils.decryptString(category1[5]) || '#10B981',
         contentCount: Number(category1[6]) || 0,
         subcategoryCount: Number(category1[7]) || 0,
-        hash: category1[8],
+        hash: category1[8] || '0x0000000000000000000000000000000000000000000000000000000000000000',
         isActive: category1[9] || true,
-        creationTime: Number(category1[10]) || Date.now(),
-        lastUpdated: Number(category1[11]) || Date.now(),
+        creationTime: Number(category1[10]) || Math.floor((Date.now() - 172800000) / 1000),
+        lastUpdated: Number(category1[11]) || Math.floor((Date.now() - 7200000) / 1000),
       });
+    } else {
+      cats.push(sampleCategories[1]);
     }
     
-    if (category2 && Array.isArray(category2)) {
+    if (category2 && Array.isArray(category2) && category2.length > 0) {
       cats.push({
         id: 2,
         name: FHEUtils.decryptString(category2[1]) || 'Entertainment',
@@ -273,11 +324,13 @@ export function useContentMatrix() {
         color: FHEUtils.decryptString(category2[5]) || '#F59E0B',
         contentCount: Number(category2[6]) || 0,
         subcategoryCount: Number(category2[7]) || 0,
-        hash: category2[8],
+        hash: category2[8] || '0x0000000000000000000000000000000000000000000000000000000000000000',
         isActive: category2[9] || true,
-        creationTime: Number(category2[10]) || Date.now(),
-        lastUpdated: Number(category2[11]) || Date.now(),
+        creationTime: Number(category2[10]) || Math.floor((Date.now() - 259200000) / 1000),
+        lastUpdated: Number(category2[11]) || Math.floor((Date.now() - 10800000) / 1000),
       });
+    } else {
+      cats.push(sampleCategories[2]);
     }
     
     setCategories(cats);
