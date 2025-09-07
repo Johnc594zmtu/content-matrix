@@ -377,14 +377,7 @@ export default function LicenseManagement() {
             </div>
           )}
 
-          {/* Success Message for License Revocation */}
-          {isLicenseRevoked && (
-            <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-md">
-              <p className="text-sm text-green-800">
-                License revoked successfully! The transaction has been confirmed on the blockchain.
-              </p>
-            </div>
-          )}
+          {/* Note: License revocation functionality not available in current contract */}
         </div>
       )}
 
