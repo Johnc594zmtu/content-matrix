@@ -1,7 +1,6 @@
-import { ethers } from "hardhat";
-import { writeFileSync } from "fs";
-import { join } from "path";
-import hre from "hardhat";
+const { ethers } = require("hardhat");
+const fs = require("fs");
+const path = require("path");
 
 async function main() {
   console.log("🚀 Starting Content Matrix deployment...");
@@ -58,8 +57,8 @@ async function main() {
   };
 
   // Save deployment info
-  const deploymentPath = join(__dirname, "..", "deployment-info.json");
-  writeFileSync(deploymentPath, JSON.stringify(deploymentInfo, null, 2));
+  const deploymentPath = path.join(__dirname, "..", "deployment-info.json");
+  fs.writeFileSync(deploymentPath, JSON.stringify(deploymentInfo, null, 2));
   console.log("\n📄 Deployment info saved to:", deploymentPath);
 
   // Create environment file template
@@ -78,15 +77,17 @@ NEXT_PUBLIC_CHAIN_ID=${chainId}
 NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_project_id_here
 
 # RPC URLs (for production)
-SEPOLIA_URL=your_sepolia_rpc_url_here
+NEXT_PUBLIC_RPC_URL=https://sepolia.infura.io/v3/your_infura_key_here
+
+# Private Key (for server-side operations only - NEVER commit this!)
 PRIVATE_KEY=your_private_key_here
 `;
 
-  const envPath = join(__dirname, "..", ".env.example");
-  writeFileSync(envPath, envTemplate);
-  console.log("📝 Environment template saved to:", envPath);
+  const envPath = path.join(__dirname, "..", ".env.example");
+  fs.writeFileSync(envPath, envTemplate);
+  console.log("📄 Environment template saved to:", envPath);
 
-  // Verify contracts (if on a supported network)
+  // Verify contracts on Sepolia
   if (chainId === 11155111n) { // Sepolia
     console.log("\n🔍 Verifying contracts on Sepolia...");
     try {
@@ -111,22 +112,16 @@ PRIVATE_KEY=your_private_key_here
   }
 
   console.log("\n🎉 Deployment completed successfully!");
-  console.log("\n📋 Summary:");
-  console.log(`Network: ${network.name} (${chainId})`);
-  console.log(`ContentMatrix: ${contentMatrix.address}`);
-  console.log(`ContentProtection: ${contentProtection.address}`);
-  console.log(`Deployer: ${deployer.address}`);
-  
-  console.log("\n🔧 Next steps:");
+  console.log("\n📋 Next steps:");
   console.log("1. Copy .env.example to .env.local");
-  console.log("2. Update NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID");
-  console.log("3. Run 'npm run dev' to start the frontend");
-  console.log("4. Connect your wallet and start creating content!");
+  console.log("2. Update environment variables with your actual values");
+  console.log("3. Run 'npm run dev' to start the development server");
+  console.log("4. Visit http://localhost:3000 to see your application");
 }
 
 main()
   .then(() => process.exit(0))
   .catch((error) => {
-    console.error("❌ Deployment failed:", error);
+    console.error(error);
     process.exit(1);
   });

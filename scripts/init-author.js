@@ -50,7 +50,7 @@ async function main() {
       console.log(`  Total Authors: ${newStats[3]}`);
       
     } catch (error) {
-      console.error("❌ Error creating author:", error.message);
+      console.error("❌ Error creating author:", error instanceof Error ? error.message : String(error));
     }
   } else {
     console.log("✅ Authors already exist in the contract");
