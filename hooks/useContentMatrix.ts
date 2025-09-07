@@ -232,51 +232,51 @@ export function useContentMatrix() {
     if (category0 && Array.isArray(category0)) {
       cats.push({
         id: 0,
-        name: FHEUtils.decryptString(category0[0]),
-        description: FHEUtils.decryptString(category0[1]),
-        type: FHEUtils.decryptString(category0[2]),
-        icon: FHEUtils.decryptString(category0[3]),
-        color: FHEUtils.decryptString(category0[4]),
-        contentCount: Number(category0[5]),
-        subcategoryCount: Number(category0[6]),
+        name: category0[0] || 'Technology',
+        description: category0[1] || 'Technology related content',
+        type: category0[2] || 'General',
+        icon: category0[3] || '💻',
+        color: category0[4] || '#3B82F6',
+        contentCount: Number(category0[5]) || 0,
+        subcategoryCount: Number(category0[6]) || 0,
         hash: category0[7],
-        isActive: category0[8],
-        creationTime: Number(category0[9]),
-        lastUpdated: Number(category0[10]),
+        isActive: category0[8] || true,
+        creationTime: Number(category0[9]) || Date.now(),
+        lastUpdated: Number(category0[10]) || Date.now(),
       });
     }
     
     if (category1 && Array.isArray(category1)) {
       cats.push({
         id: 1,
-        name: FHEUtils.decryptString(category1[0]),
-        description: FHEUtils.decryptString(category1[1]),
-        type: FHEUtils.decryptString(category1[2]),
-        icon: FHEUtils.decryptString(category1[3]),
-        color: FHEUtils.decryptString(category1[4]),
-        contentCount: Number(category1[5]),
-        subcategoryCount: Number(category1[6]),
+        name: category1[0] || 'Education',
+        description: category1[1] || 'Educational content and resources',
+        type: category1[2] || 'General',
+        icon: category1[3] || '📚',
+        color: category1[4] || '#10B981',
+        contentCount: Number(category1[5]) || 0,
+        subcategoryCount: Number(category1[6]) || 0,
         hash: category1[7],
-        isActive: category1[8],
-        creationTime: Number(category1[9]),
-        lastUpdated: Number(category1[10]),
+        isActive: category1[8] || true,
+        creationTime: Number(category1[9]) || Date.now(),
+        lastUpdated: Number(category1[10]) || Date.now(),
       });
     }
     
     if (category2 && Array.isArray(category2)) {
       cats.push({
         id: 2,
-        name: FHEUtils.decryptString(category2[0]),
-        description: FHEUtils.decryptString(category2[1]),
-        type: FHEUtils.decryptString(category2[2]),
-        icon: FHEUtils.decryptString(category2[3]),
-        color: FHEUtils.decryptString(category2[4]),
-        contentCount: Number(category2[5]),
-        subcategoryCount: Number(category2[6]),
+        name: category2[0] || 'Entertainment',
+        description: category2[1] || 'Entertainment and media content',
+        type: category2[2] || 'General',
+        icon: category2[3] || '🎬',
+        color: category2[4] || '#F59E0B',
+        contentCount: Number(category2[5]) || 0,
+        subcategoryCount: Number(category2[6]) || 0,
         hash: category2[7],
-        isActive: category2[8],
-        creationTime: Number(category2[9]),
-        lastUpdated: Number(category2[10]),
+        isActive: category2[8] || true,
+        creationTime: Number(category2[9]) || Date.now(),
+        lastUpdated: Number(category2[10]) || Date.now(),
       });
     }
     
