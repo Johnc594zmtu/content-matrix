@@ -21,16 +21,15 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+        className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
         onClick={onClose}
       />
       
       {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-4">
-        <div className={`relative w-full ${sizeClasses[size]} transform overflow-hidden rounded-xl bg-gray-800 shadow-xl transition-all`}>
+      <div className={`relative w-full ${sizeClasses[size]} transform overflow-hidden rounded-xl bg-gray-800 shadow-xl transition-all`}>
           {/* Header */}
           <div className="flex items-center justify-between border-b border-gray-700 px-6 py-4">
             <h3 className="text-xl font-semibold text-white">
