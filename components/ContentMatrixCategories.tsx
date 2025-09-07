@@ -92,10 +92,10 @@ export default function ContentMatrixCategories() {
         />
       </div>
 
-      {/* Categories Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Categories List */}
+      <div className="bg-gray-800/30 rounded-lg border border-gray-700/50 overflow-hidden">
         {filteredCategories.length === 0 ? (
-          <div className="col-span-full text-center py-12">
+          <div className="text-center py-12">
             <div className="text-6xl mb-4">📁</div>
             <h3 className="text-xl font-semibold text-white mb-2">No categories found</h3>
             <p className="text-gray-400 mb-6">
@@ -112,81 +112,94 @@ export default function ContentMatrixCategories() {
             )}
           </div>
         ) : (
-          filteredCategories.map((category) => (
-            <div key={category.id} className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all">
-              {/* Header with icon and status */}
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center space-x-3 flex-1 min-w-0">
-                  <div 
-                    className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl flex-shrink-0"
-                    style={{ backgroundColor: category.color + '20' }}
-                  >
-                    {category.icon}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-lg font-semibold text-white truncate">{category.name}</h3>
-                    <p className="text-sm text-gray-400 truncate">{category.type}</p>
-                  </div>
-                </div>
-                <div className={`px-2 py-1 rounded-full text-xs font-medium flex-shrink-0 ml-2 ${
-                  category.isActive 
-                    ? 'bg-green-500/20 text-green-300' 
-                    : 'bg-red-500/20 text-red-300'
-                }`}>
-                  {category.isActive ? 'Active' : 'Inactive'}
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="mb-4">
-                <p className="text-gray-300 text-sm line-clamp-3 leading-relaxed">{category.description}</p>
-              </div>
-
-              {/* Statistics */}
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div className="text-center p-3 bg-gray-700/30 rounded-lg">
-                  <div className="text-2xl font-bold text-white">{category.contentCount}</div>
-                  <div className="text-xs text-gray-400 mt-1">Content</div>
-                </div>
-                <div className="text-center p-3 bg-gray-700/30 rounded-lg">
-                  <div className="text-2xl font-bold text-white">{category.subcategoryCount}</div>
-                  <div className="text-xs text-gray-400 mt-1">Subcategories</div>
-                </div>
-              </div>
-
-              {/* Progress and timestamps */}
-              <div className="mb-4">
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-2 text-sm text-gray-400 mb-3">
-                  <span className="truncate">Created: {FHEUtils.formatTimestamp(BigInt(category.creationTime))}</span>
-                  <span className="truncate">Updated: {FHEUtils.formatTimestamp(BigInt(category.lastUpdated))}</span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div 
-                    className="h-2 rounded-full transition-all duration-300"
-                    style={{ 
-                      backgroundColor: category.color,
-                      width: `${Math.min((category.contentCount / 100) * 100, 100)}%` 
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Footer with ID and actions */}
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 pt-4 border-t border-gray-700/50">
-                <div className="text-sm text-gray-400 truncate">
-                  ID: {category.id}
-                </div>
-                <div className="flex space-x-2">
-                  <button className="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition-colors flex-shrink-0">
-                    Edit
-                  </button>
-                  <button className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 text-red-300 text-sm rounded-lg transition-colors flex-shrink-0">
-                    Delete
-                  </button>
-                </div>
+          <>
+            {/* Table Header */}
+            <div className="bg-gray-700/50 px-6 py-4 border-b border-gray-600/50">
+              <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-300">
+                <div className="col-span-3">Category</div>
+                <div className="col-span-2">Type</div>
+                <div className="col-span-3">Description</div>
+                <div className="col-span-1 text-center">Content</div>
+                <div className="col-span-1 text-center">Sub</div>
+                <div className="col-span-1 text-center">Status</div>
+                <div className="col-span-1 text-center">Actions</div>
               </div>
             </div>
-          ))
+
+            {/* Table Body */}
+            <div className="divide-y divide-gray-700/30">
+              {filteredCategories.map((category) => (
+                <div key={category.id} className="px-6 py-4 hover:bg-gray-700/20 transition-colors">
+                  <div className="grid grid-cols-12 gap-4 items-center">
+                    {/* Category Name & Icon */}
+                    <div className="col-span-3 flex items-center space-x-3">
+                      <div 
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-lg flex-shrink-0"
+                        style={{ backgroundColor: category.color + '20' }}
+                      >
+                        {category.icon}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-white font-medium truncate">{category.name}</div>
+                        <div className="text-xs text-gray-400">ID: {category.id}</div>
+                      </div>
+                    </div>
+
+                    {/* Type */}
+                    <div className="col-span-2">
+                      <span className="text-gray-300 text-sm">{category.type}</span>
+                    </div>
+
+                    {/* Description */}
+                    <div className="col-span-3">
+                      <p className="text-gray-400 text-sm line-clamp-2">{category.description}</p>
+                    </div>
+
+                    {/* Content Count */}
+                    <div className="col-span-1 text-center">
+                      <span className="text-white font-semibold">{category.contentCount}</span>
+                    </div>
+
+                    {/* Subcategory Count */}
+                    <div className="col-span-1 text-center">
+                      <span className="text-white font-semibold">{category.subcategoryCount}</span>
+                    </div>
+
+                    {/* Status */}
+                    <div className="col-span-1 text-center">
+                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                        category.isActive 
+                          ? 'bg-green-500/20 text-green-300' 
+                          : 'bg-red-500/20 text-red-300'
+                      }`}>
+                        {category.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="col-span-1 text-center">
+                      <div className="flex justify-center space-x-1">
+                        <button className="px-2 py-1 text-xs bg-gray-600 hover:bg-gray-500 text-white rounded transition-colors">
+                          Edit
+                        </button>
+                        <button className="px-2 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded transition-colors">
+                          Del
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Timestamps (collapsed by default, can be expanded) */}
+                  <div className="mt-2 pt-2 border-t border-gray-700/30">
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>Created: {FHEUtils.formatTimestamp(BigInt(category.creationTime))}</span>
+                      <span>Updated: {FHEUtils.formatTimestamp(BigInt(category.lastUpdated))}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 
