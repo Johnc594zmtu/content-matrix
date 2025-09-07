@@ -87,56 +87,43 @@ export function useContentMatrix() {
     functionName: 'getContentMatrixStatistics',
   });
 
-  // Get individual content items
-  const { data: content0, isLoading: content0Loading } = useReadContract({
-    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
-    abi: CONTENT_MATRIX_ABI,
-    functionName: 'getContentItem',
-    args: [BigInt(0)],
-    query: { enabled: !!statsData && Number(statsData[0]) > 0 }
-  });
+  // Dynamic content items query based on stats
+  const totalContent = statsData ? Number(statsData[0]) : 0;
+  const totalCategories = statsData ? Number(statsData[2]) : 0;
+  const totalAuthors = statsData ? Number(statsData[3]) : 0;
 
-  const { data: content1, isLoading: content1Loading } = useReadContract({
-    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
-    abi: CONTENT_MATRIX_ABI,
-    functionName: 'getContentItem',
-    args: [BigInt(1)],
-    query: { enabled: !!statsData && Number(statsData[0]) > 1 }
-  });
+  // Generate dynamic queries for content items
+  const contentQueries = Array.from({ length: totalContent }, (_, i) => 
+    useReadContract({
+      address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+      abi: CONTENT_MATRIX_ABI,
+      functionName: 'getContentItem',
+      args: [BigInt(i)],
+      query: { enabled: !!statsData && totalContent > i }
+    })
+  );
 
-  // Get individual categories
-  const { data: category0, isLoading: category0Loading } = useReadContract({
-    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
-    abi: CONTENT_MATRIX_ABI,
-    functionName: 'getContentCategory',
-    args: [BigInt(0)],
-    query: { enabled: !!statsData && Number(statsData[2]) > 0 }
-  });
+  // Generate dynamic queries for categories
+  const categoryQueries = Array.from({ length: totalCategories }, (_, i) => 
+    useReadContract({
+      address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+      abi: CONTENT_MATRIX_ABI,
+      functionName: 'getContentCategory',
+      args: [BigInt(i)],
+      query: { enabled: !!statsData && totalCategories > i }
+    })
+  );
 
-  const { data: category1, isLoading: category1Loading } = useReadContract({
-    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
-    abi: CONTENT_MATRIX_ABI,
-    functionName: 'getContentCategory',
-    args: [BigInt(1)],
-    query: { enabled: !!statsData && Number(statsData[2]) > 1 }
-  });
-
-  const { data: category2, isLoading: category2Loading } = useReadContract({
-    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
-    abi: CONTENT_MATRIX_ABI,
-    functionName: 'getContentCategory',
-    args: [BigInt(2)],
-    query: { enabled: !!statsData && Number(statsData[2]) > 2 }
-  });
-
-  // Get individual authors
-  const { data: author0, isLoading: author0Loading } = useReadContract({
-    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
-    abi: CONTENT_MATRIX_ABI,
-    functionName: 'getContentAuthor',
-    args: [BigInt(0)],
-    query: { enabled: !!statsData && Number(statsData[3]) > 0 }
-  });
+  // Generate dynamic queries for authors
+  const authorQueries = Array.from({ length: totalAuthors }, (_, i) => 
+    useReadContract({
+      address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+      abi: CONTENT_MATRIX_ABI,
+      functionName: 'getContentAuthor',
+      args: [BigInt(i)],
+      query: { enabled: !!statsData && totalAuthors > i }
+    })
+  );
 
   // Create content item
   const { writeContract: writeCreateContent, data: createContentHash, isPending: isCreatingContent } = useWriteContract();
@@ -168,200 +155,97 @@ export function useContentMatrix() {
     }
   }, [statsData]);
 
-  // Process content items
+  // Process content items dynamically
   useEffect(() => {
     const items: ContentItemData[] = [];
     
-    if (content0 && Array.isArray(content0)) {
-      items.push({
-        id: 0,
-        title: FHEUtils.decryptString(String(content0[0])),
-        description: FHEUtils.decryptString(String(content0[1])),
-        contentType: FHEUtils.decryptString(String(content0[2])),
-        contentHash: content0[3],
-        author: FHEUtils.decryptString(String(content0[4])),
-        category: FHEUtils.decryptString(String(content0[5])),
-        tags: FHEUtils.decryptString(String(content0[6])),
-        language: FHEUtils.decryptString(String(content0[7])),
-        contentData: FHEUtils.decryptString(String(content0[8])),
-        fileSize: FHEUtils.decryptNumber(String(content0[9])) || 0,
-        viewCount: FHEUtils.decryptNumber(String(content0[10])) || 0,
-        likeCount: FHEUtils.decryptNumber(String(content0[11])) || 0,
-        shareCount: FHEUtils.decryptNumber(String(content0[12])) || 0,
-        downloadCount: FHEUtils.decryptNumber(String(content0[13])) || 0,
-        contentMatrix: String(content0[14]),
-        isPublic: Boolean(content0[15]),
-        isActive: Boolean(content0[16]),
-        creationTime: Number(content0[17]),
-        lastUpdated: Number(content0[18]),
-      });
-    }
-    
-    if (content1 && Array.isArray(content1)) {
-      items.push({
-        id: 1,
-        title: FHEUtils.decryptString(String(content1[0])),
-        description: FHEUtils.decryptString(String(content1[1])),
-        contentType: FHEUtils.decryptString(String(content1[2])),
-        contentHash: content1[3],
-        author: FHEUtils.decryptString(String(content1[4])),
-        category: FHEUtils.decryptString(String(content1[5])),
-        tags: FHEUtils.decryptString(String(content1[6])),
-        language: FHEUtils.decryptString(String(content1[7])),
-        contentData: FHEUtils.decryptString(String(content1[8])),
-        fileSize: FHEUtils.decryptNumber(String(content1[9])) || 0,
-        viewCount: FHEUtils.decryptNumber(String(content1[10])) || 0,
-        likeCount: FHEUtils.decryptNumber(String(content1[11])) || 0,
-        shareCount: FHEUtils.decryptNumber(String(content1[12])) || 0,
-        downloadCount: FHEUtils.decryptNumber(String(content1[13])) || 0,
-        contentMatrix: String(content1[14]),
-        isPublic: Boolean(content1[15]),
-        isActive: Boolean(content1[16]),
-        creationTime: Number(content1[17]),
-        lastUpdated: Number(content1[18]),
-      });
-    }
+    contentQueries.forEach((query, index) => {
+      if (query.data && Array.isArray(query.data)) {
+        const contentData = query.data;
+        items.push({
+          id: index,
+          title: FHEUtils.decryptString(String(contentData[0])),
+          description: FHEUtils.decryptString(String(contentData[1])),
+          contentType: FHEUtils.decryptString(String(contentData[2])),
+          contentHash: contentData[3],
+          author: FHEUtils.decryptString(String(contentData[4])),
+          category: FHEUtils.decryptString(String(contentData[5])),
+          tags: FHEUtils.decryptString(String(contentData[6])),
+          language: FHEUtils.decryptString(String(contentData[7])),
+          contentData: FHEUtils.decryptString(String(contentData[8])),
+          fileSize: FHEUtils.decryptNumber(String(contentData[9])) || 0,
+          viewCount: FHEUtils.decryptNumber(String(contentData[10])) || 0,
+          likeCount: FHEUtils.decryptNumber(String(contentData[11])) || 0,
+          shareCount: FHEUtils.decryptNumber(String(contentData[12])) || 0,
+          downloadCount: FHEUtils.decryptNumber(String(contentData[13])) || 0,
+          contentMatrix: String(contentData[14]),
+          isPublic: Boolean(contentData[15]),
+          isActive: Boolean(contentData[16]),
+          creationTime: Number(contentData[17]),
+          lastUpdated: Number(contentData[18]),
+        });
+      }
+    });
     
     setContentItems(items);
-  }, [content0, content1]);
+  }, [contentQueries]);
 
-  // Process categories
+  // Process categories dynamically
   useEffect(() => {
     const cats: ContentCategoryData[] = [];
     
-    // For demo purposes, create sample categories since FHE decryption is not implemented
-    const sampleCategories = [
-      {
-        id: 0,
-        name: 'Technology',
-        description: 'Technology related content and innovations',
-        type: 'General',
-        icon: '💻',
-        color: '#3B82F6',
-        contentCount: 0,
-        subcategoryCount: 0,
-        hash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        isActive: true,
-        creationTime: Date.now() - 86400000, // 1 day ago
-        lastUpdated: Date.now() - 3600000, // 1 hour ago
-      },
-      {
-        id: 1,
-        name: 'Education',
-        description: 'Educational content and learning resources',
-        type: 'General',
-        icon: '📚',
-        color: '#10B981',
-        contentCount: 0,
-        subcategoryCount: 0,
-        hash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        isActive: true,
-        creationTime: Date.now() - 172800000, // 2 days ago
-        lastUpdated: Date.now() - 7200000, // 2 hours ago
-      },
-      {
-        id: 2,
-        name: 'Entertainment',
-        description: 'Entertainment and media content',
-        type: 'General',
-        icon: '🎬',
-        color: '#F59E0B',
-        contentCount: 0,
-        subcategoryCount: 0,
-        hash: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        isActive: true,
-        creationTime: Date.now() - 259200000, // 3 days ago
-        lastUpdated: Date.now() - 10800000, // 3 hours ago
+    categoryQueries.forEach((query, index) => {
+      if (query.data && Array.isArray(query.data)) {
+        const categoryData = query.data;
+        cats.push({
+          id: index,
+          name: FHEUtils.decryptString(String(categoryData[0])),
+          description: FHEUtils.decryptString(String(categoryData[1])),
+          type: FHEUtils.decryptString(String(categoryData[2])),
+          icon: FHEUtils.decryptString(String(categoryData[3])),
+          color: FHEUtils.decryptString(String(categoryData[4])),
+          contentCount: FHEUtils.decryptNumber(String(categoryData[5])) || 0,
+          subcategoryCount: FHEUtils.decryptNumber(String(categoryData[6])) || 0,
+          hash: String(categoryData[7]),
+          isActive: Boolean(categoryData[8]),
+          creationTime: Number(categoryData[9]),
+          lastUpdated: Number(categoryData[10]),
+        });
       }
-    ];
-    
-    // If we have real data from contract, use it; otherwise use sample data
-    if (category0 && Array.isArray(category0) && category0.length > 0) {
-      cats.push({
-        id: 0,
-        name: FHEUtils.decryptString(String(category0[1])) || 'Technology',
-        description: FHEUtils.decryptString(String(category0[2])) || 'Technology related content and innovations',
-        type: FHEUtils.decryptString(String(category0[3])) || 'General',
-        icon: FHEUtils.decryptString(String(category0[4])) || '💻',
-        color: FHEUtils.decryptString(String(category0[5])) || '#3B82F6',
-        contentCount: FHEUtils.decryptNumber(String(category0[6])) || 0,
-        subcategoryCount: FHEUtils.decryptNumber(String(category0[7])) || 0,
-        hash: String(category0[8]) || '0x0000000000000000000000000000000000000000000000000000000000000000',
-        isActive: Boolean(category0[9]) || true,
-        creationTime: Number(category0[10]) || Math.floor((Date.now() - 86400000) / 1000),
-        lastUpdated: Number(category0[11]) || Math.floor((Date.now() - 3600000) / 1000),
-      });
-    } else {
-      cats.push(sampleCategories[0]);
-    }
-    
-    if (category1 && Array.isArray(category1) && category1.length > 0) {
-      cats.push({
-        id: 1,
-        name: FHEUtils.decryptString(String(category1[1])) || 'Education',
-        description: FHEUtils.decryptString(String(category1[2])) || 'Educational content and learning resources',
-        type: FHEUtils.decryptString(String(category1[3])) || 'General',
-        icon: FHEUtils.decryptString(String(category1[4])) || '📚',
-        color: FHEUtils.decryptString(String(category1[5])) || '#10B981',
-        contentCount: FHEUtils.decryptNumber(String(category1[6])) || 0,
-        subcategoryCount: FHEUtils.decryptNumber(String(category1[7])) || 0,
-        hash: String(category1[8]) || '0x0000000000000000000000000000000000000000000000000000000000000000',
-        isActive: Boolean(category1[9]) || true,
-        creationTime: Number(category1[10]) || Math.floor((Date.now() - 172800000) / 1000),
-        lastUpdated: Number(category1[11]) || Math.floor((Date.now() - 7200000) / 1000),
-      });
-    } else {
-      cats.push(sampleCategories[1]);
-    }
-    
-    if (category2 && Array.isArray(category2) && category2.length > 0) {
-      cats.push({
-        id: 2,
-        name: FHEUtils.decryptString(String(category2[1])) || 'Entertainment',
-        description: FHEUtils.decryptString(String(category2[2])) || 'Entertainment and media content',
-        type: FHEUtils.decryptString(String(category2[3])) || 'General',
-        icon: FHEUtils.decryptString(String(category2[4])) || '🎬',
-        color: FHEUtils.decryptString(String(category2[5])) || '#F59E0B',
-        contentCount: FHEUtils.decryptNumber(String(category2[6])) || 0,
-        subcategoryCount: FHEUtils.decryptNumber(String(category2[7])) || 0,
-        hash: String(category2[8]) || '0x0000000000000000000000000000000000000000000000000000000000000000',
-        isActive: Boolean(category2[9]) || true,
-        creationTime: Number(category2[10]) || Math.floor((Date.now() - 259200000) / 1000),
-        lastUpdated: Number(category2[11]) || Math.floor((Date.now() - 10800000) / 1000),
-      });
-    } else {
-      cats.push(sampleCategories[2]);
-    }
+    });
     
     setCategories(cats);
-  }, [category0, category1, category2]);
+  }, [categoryQueries]);
 
-  // Process authors
+  // Process authors dynamically
   useEffect(() => {
     const auths: ContentAuthorData[] = [];
     
-    if (author0 && Array.isArray(author0)) {
-      auths.push({
-        id: 0,
-        name: FHEUtils.decryptString(String(author0[0])),
-        email: FHEUtils.decryptString(String(author0[1])),
-        bio: FHEUtils.decryptString(String(author0[2])),
-        avatar: FHEUtils.decryptString(String(author0[3])),
-        website: FHEUtils.decryptString(String(author0[4])),
-        socialMedia: FHEUtils.decryptString(String(author0[5])),
-        contentCount: FHEUtils.decryptNumber(String(author0[6])) || 0,
-        followerCount: FHEUtils.decryptNumber(String(author0[7])) || 0,
-        rating: FHEUtils.decryptNumber(String(author0[8])) || 0,
-        status: FHEUtils.decryptString(String(author0[9])),
-        isVerified: Boolean(author0[10]),
-        isActive: Boolean(author0[11]),
-        creationTime: Number(author0[12]),
-        lastUpdated: Number(author0[13]),
-      });
-    }
+    authorQueries.forEach((query, index) => {
+      if (query.data && Array.isArray(query.data)) {
+        const authorData = query.data;
+        auths.push({
+          id: index,
+          name: FHEUtils.decryptString(String(authorData[0])),
+          email: FHEUtils.decryptString(String(authorData[1])),
+          bio: FHEUtils.decryptString(String(authorData[2])),
+          avatar: FHEUtils.decryptString(String(authorData[3])),
+          website: FHEUtils.decryptString(String(authorData[4])),
+          socialMedia: FHEUtils.decryptString(String(authorData[5])),
+          contentCount: FHEUtils.decryptNumber(String(authorData[6])) || 0,
+          followerCount: FHEUtils.decryptNumber(String(authorData[7])) || 0,
+          rating: FHEUtils.decryptNumber(String(authorData[8])) || 0,
+          status: FHEUtils.decryptString(String(authorData[9])),
+          isVerified: Boolean(authorData[10]),
+          isActive: Boolean(authorData[11]),
+          creationTime: Number(authorData[12]),
+          lastUpdated: Number(authorData[13]),
+        });
+      }
+    });
     
     setAuthors(auths);
-  }, [author0]);
+  }, [authorQueries]);
 
   // Create content function
   const createContent = async (contentData: any) => {

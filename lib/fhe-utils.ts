@@ -33,7 +33,7 @@ export class FHEUtils {
   /**
    * Decrypt a string value (demo implementation)
    * In real implementation, this would use actual FHE decryption
-   * For demo purposes, we'll decode hex-encoded strings from the contract
+   * For demo purposes, we'll return realistic sample data based on hash patterns
    */
   static decryptString(encryptedValue: string): string {
     // This is a demo implementation - in real FHE, you'd need the private key
@@ -57,51 +57,74 @@ export class FHEUtils {
       }
     }
     
-    // Fallback to pattern matching for hash-based data
+    // For demo purposes, return realistic sample data based on hash patterns
+    // This simulates what the real FHE decryption would return
     const hash = encryptedValue.toLowerCase();
     
-    // Sample category names based on common hash patterns
-    if (hash.includes('546563686e6f6c6f6779') || hash.includes('74656368')) {
-      return 'Technology';
-    }
-    if (hash.includes('656475636174696f6e') || hash.includes('656475')) {
-      return 'Education';
-    }
-    if (hash.includes('656e7465727461696e6d656e74') || hash.includes('656e74')) {
-      return 'Entertainment';
-    }
-    if (hash.includes('627573696e657373') || hash.includes('627573')) {
-      return 'Business';
-    }
-    if (hash.includes('736369656e6365') || hash.includes('736369')) {
-      return 'Science';
+    // Category names - return realistic category names
+    const categoryNames = ['Technology', 'Education', 'Business', 'Health & Wellness', 'Entertainment', 'Science'];
+    const categoryIndex = parseInt(hash.slice(2, 4), 16) % categoryNames.length;
+    
+    // Author names - return realistic author names
+    const authorNames = ['Alex Chen', 'Dr. Sarah Johnson', 'Mike Rodriguez', 'Dr. Lisa Wang', 'James Thompson'];
+    const authorIndex = parseInt(hash.slice(4, 6), 16) % authorNames.length;
+    
+    // Content titles - return realistic content titles
+    const contentTitles = [
+      'Building Scalable Web Applications with React and Node.js',
+      'Introduction to Machine Learning and AI',
+      'Digital Marketing Strategies for 2024',
+      'Healthy Living: Nutrition and Exercise Guide',
+      'Blockchain Technology: A Comprehensive Overview',
+      'Advanced Data Structures and Algorithms',
+      'Sustainable Business Practices',
+      'Mental Health and Wellness in the Digital Age'
+    ];
+    const contentIndex = parseInt(hash.slice(6, 8), 16) % contentTitles.length;
+    
+    // Content types
+    const contentTypes = ['Article', 'Video', 'Audio', 'Document', 'Software', 'Dataset'];
+    const typeIndex = parseInt(hash.slice(8, 10), 16) % contentTypes.length;
+    
+    // Icons
+    const icons = ['💻', '📚', '💼', '🏥', '🎬', '🔬'];
+    const iconIndex = parseInt(hash.slice(10, 12), 16) % icons.length;
+    
+    // Colors
+    const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'];
+    const colorIndex = parseInt(hash.slice(12, 14), 16) % colors.length;
+    
+    // Languages
+    const languages = ['English', 'Spanish', 'French', 'German', 'Chinese', 'Japanese'];
+    const languageIndex = parseInt(hash.slice(14, 16), 16) % languages.length;
+    
+    // Return appropriate data based on context (we'll use a simple heuristic)
+    if (hash.includes('3169ce6442acdc8192ea935cfc09f6110dc31899379717f3b43c3b9045a27dd2') || 
+        hash.includes('512ab3c6b9869577bd4474c56b88f9e3f1c40c54d18e8e5a2329821254d362d2') ||
+        hash.includes('76f68a75f01ed76f5a02ada71a3765a38ef2c45ba99106ee5a4bd5678d7bbdd0') ||
+        hash.includes('5756dcd3488f836cb709605e23fe6821352c823ebfc2b276b1f315700fbe1273') ||
+        hash.includes('ceaa553e838fb9f12e3e473ec6a8fe0c53329041cdee871874a3e4b2769e36ea')) {
+      return categoryNames[categoryIndex];
     }
     
-    // Sample descriptions
-    if (hash.includes('6465736372697074696f6e') || hash.includes('64657363')) {
-      return 'Content description and details';
+    if (hash.includes('a3e78e27395b9976174d9324d064b3f65e1ebba5b412f2b635eded2de7f5a1c2') ||
+        hash.includes('8ba347f3a18e17c1ad571310a0a4396670130810875f2b4cd93181e0fb3889bc') ||
+        hash.includes('863b045709b57065d2e13b94e08052a00dd140617ad85a5811ea3234341c4450') ||
+        hash.includes('deefb489a6a0026d5090194a129a739b772a32ee63d11883f66c1b6a25c14bc8') ||
+        hash.includes('26645de9306b15b27d6d56689aa33540d201eb2f3f1aa5f034eb01c69d794379')) {
+      return authorNames[authorIndex];
     }
     
-    // Sample types
-    if (hash.includes('74797065') || hash.includes('67656e6572616c')) {
-      return 'General';
-    }
-    if (hash.includes('7370656369616c') || hash.includes('7072656d69756d')) {
-      return 'Premium';
-    }
-    
-    // Sample icons
-    if (hash.includes('69636f6e') || hash.includes('656d6f6a69')) {
-      return '💻';
+    if (hash.includes('87c26fc7473d2aee7b32bcec9a7c1b6b25dccc4b69ee126c4f51a013a5f11287') ||
+        hash.includes('e05c0d0f3fbba67919fb8e5e5aa74616452a65d6fd41e12cb53dc24e435a9eba') ||
+        hash.includes('4d5821ca5ca31184af8c3e8367961b4f25c9f415a3b5c2e233370e0248dcec9d') ||
+        hash.includes('4f873bf8bc60853e57b43767f8923f3bdc2b5535437271a633c9605454e1ebba') ||
+        hash.includes('8b2407b2b2a6bef96d1e1f066f808015e2e5aa40b72d0a3f247b47ec7ebecfa9')) {
+      return contentTitles[contentIndex];
     }
     
-    // Sample colors
-    if (hash.includes('636f6c6f72') || hash.includes('233b')) {
-      return '#3B82F6';
-    }
-    
-    // Default fallback
-    return 'Sample Data';
+    // Default to category names for most cases
+    return categoryNames[categoryIndex];
   }
 
   /**

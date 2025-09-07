@@ -5,8 +5,8 @@ async function main() {
   console.log("🔍 Querying contract data...");
   
   // Get the contract addresses
-  const contentMatrixAddress = "0x3CAc5884cBd786A987cc4F53D061B63B4896F988";
-  const contentProtectionAddress = "0x418bE3532aed25e405Ce1d81A333Abc62E0D3421";
+  const contentMatrixAddress = "0x87eDC3c5A3Ec226426f2fB18b89b057C8cE8c73F";
+  const contentProtectionAddress = "0xF646b05b6281C030b00aaA23f288F92a5C520858";
   
   // Get the contract factory
   const ContentMatrix = await ethers.getContractFactory("ContentMatrix");
