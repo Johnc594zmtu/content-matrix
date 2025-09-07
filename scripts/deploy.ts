@@ -8,21 +8,22 @@ async function main() {
   // Get the deployer account
   const [deployer] = await ethers.getSigners();
   console.log("Deploying contracts with account:", deployer.address);
-  console.log("Account balance:", (await deployer.getBalance()).toString());
+  const balance = await ethers.provider.getBalance(deployer.address);
+  console.log("Account balance:", ethers.formatEther(balance), "ETH");
 
   // Deploy ContentMatrix contract
   console.log("\n📝 Deploying ContentMatrix contract...");
   const ContentMatrix = await ethers.getContractFactory("ContentMatrix");
   const contentMatrix = await ContentMatrix.deploy(deployer.address); // Set deployer as content manager
-  await contentMatrix.deployed();
-  console.log("ContentMatrix deployed to:", contentMatrix.address);
+  await contentMatrix.waitForDeployment();
+  console.log("ContentMatrix deployed to:", await contentMatrix.getAddress());
 
   // Deploy ContentProtection contract
   console.log("\n🔒 Deploying ContentProtection contract...");
   const ContentProtection = await ethers.getContractFactory("ContentProtection");
   const contentProtection = await ContentProtection.deploy();
-  await contentProtection.deployed();
-  console.log("ContentProtection deployed to:", contentProtection.address);
+  await contentProtection.waitForDeployment();
+  console.log("ContentProtection deployed to:", await contentProtection.getAddress());
 
   // Get network info
   const network = await ethers.provider.getNetwork();
@@ -36,22 +37,22 @@ async function main() {
     },
     contracts: {
       ContentMatrix: {
-        address: contentMatrix.address,
+        address: await contentMatrix.getAddress(),
         deployer: deployer.address,
-        transactionHash: contentMatrix.deployTransaction.hash,
-        blockNumber: contentMatrix.deployTransaction.blockNumber,
+        transactionHash: contentMatrix.deploymentTransaction()?.hash,
+        blockNumber: contentMatrix.deploymentTransaction()?.blockNumber,
       },
       ContentProtection: {
-        address: contentProtection.address,
+        address: await contentProtection.getAddress(),
         deployer: deployer.address,
-        transactionHash: contentProtection.deployTransaction.hash,
-        blockNumber: contentProtection.deployTransaction.blockNumber,
+        transactionHash: contentProtection.deploymentTransaction()?.hash,
+        blockNumber: contentProtection.deploymentTransaction()?.blockNumber,
       },
     },
     deploymentTime: new Date().toISOString(),
     gasUsed: {
-      ContentMatrix: (await contentMatrix.deployTransaction.wait()).gasUsed.toString(),
-      ContentProtection: (await contentProtection.deployTransaction.wait()).gasUsed.toString(),
+      ContentMatrix: contentMatrix.deploymentTransaction()?.gasLimit?.toString() || "0",
+      ContentProtection: contentProtection.deploymentTransaction()?.gasLimit?.toString() || "0",
     },
   };
 
@@ -65,8 +66,8 @@ async function main() {
 # Copy this to .env.local and update with your deployed contract addresses
 
 # Contract Addresses
-NEXT_PUBLIC_CONTENT_MATRIX_ADDRESS=${contentMatrix.address}
-NEXT_PUBLIC_CONTENT_PROTECTION_ADDRESS=${contentProtection.address}
+NEXT_PUBLIC_CONTENT_MATRIX_ADDRESS=${await contentMatrix.getAddress()}
+NEXT_PUBLIC_CONTENT_PROTECTION_ADDRESS=${await contentProtection.getAddress()}
 
 # Network Configuration
 NEXT_PUBLIC_NETWORK_NAME=${network.name}
