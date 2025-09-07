@@ -2,6 +2,22 @@
 
 Content Matrix is a privacy-preserving content management platform built with FHE (Fully Homomorphic Encryption) technology. It provides secure content creation, organization, analytics, and distribution while maintaining user privacy and data protection.
 
+## 🚀 Live Demo
+
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Now-blue?style=for-the-badge&logo=vercel)](https://content-matrix-navy.vercel.app/)
+
+**Experience Content Matrix in action**: [https://content-matrix-navy.vercel.app/](https://content-matrix-navy.vercel.app/)
+
+The live demo showcases:
+- 🔒 **FHE-encrypted content management** with real blockchain data
+- 📊 **Real-time analytics** and content statistics  
+- 👥 **Author management** with encrypted profiles
+- 📁 **Category organization** with emoji icons and colors
+- 🎯 **Content creation** with privacy-preserving features
+- 🌐 **Web3 wallet integration** for secure transactions
+
+> **Note**: Connect your Web3 wallet (MetaMask, WalletConnect) to interact with the live demo on Sepolia testnet.
+
 ## Features
 
 ### 📝 Content Management
