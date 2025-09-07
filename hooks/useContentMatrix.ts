@@ -92,38 +92,160 @@ export function useContentMatrix() {
   const totalCategories = statsData ? Number(statsData[2]) : 0;
   const totalAuthors = statsData ? Number(statsData[3]) : 0;
 
-  // Generate dynamic queries for content items
-  const contentQueries = Array.from({ length: totalContent }, (_, i) => 
-    useReadContract({
-      address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
-      abi: CONTENT_MATRIX_ABI,
-      functionName: 'getContentItem',
-      args: [BigInt(i)],
-      query: { enabled: !!statsData && totalContent > i }
-    })
-  );
+  // Query individual items (we'll query up to 10 of each type to be safe)
+  const { data: content0 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentItem',
+    args: [BigInt(0)],
+    query: { enabled: !!statsData && totalContent > 0 }
+  });
 
-  // Generate dynamic queries for categories
-  const categoryQueries = Array.from({ length: totalCategories }, (_, i) => 
-    useReadContract({
-      address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
-      abi: CONTENT_MATRIX_ABI,
-      functionName: 'getContentCategory',
-      args: [BigInt(i)],
-      query: { enabled: !!statsData && totalCategories > i }
-    })
-  );
+  const { data: content1 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentItem',
+    args: [BigInt(1)],
+    query: { enabled: !!statsData && totalContent > 1 }
+  });
 
-  // Generate dynamic queries for authors
-  const authorQueries = Array.from({ length: totalAuthors }, (_, i) => 
-    useReadContract({
-      address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
-      abi: CONTENT_MATRIX_ABI,
-      functionName: 'getContentAuthor',
-      args: [BigInt(i)],
-      query: { enabled: !!statsData && totalAuthors > i }
-    })
-  );
+  const { data: content2 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentItem',
+    args: [BigInt(2)],
+    query: { enabled: !!statsData && totalContent > 2 }
+  });
+
+  const { data: content3 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentItem',
+    args: [BigInt(3)],
+    query: { enabled: !!statsData && totalContent > 3 }
+  });
+
+  const { data: content4 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentItem',
+    args: [BigInt(4)],
+    query: { enabled: !!statsData && totalContent > 4 }
+  });
+
+  const { data: content5 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentItem',
+    args: [BigInt(5)],
+    query: { enabled: !!statsData && totalContent > 5 }
+  });
+
+  const { data: content6 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentItem',
+    args: [BigInt(6)],
+    query: { enabled: !!statsData && totalContent > 6 }
+  });
+
+  const { data: content7 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentItem',
+    args: [BigInt(7)],
+    query: { enabled: !!statsData && totalContent > 7 }
+  });
+
+  // Query categories
+  const { data: category0 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentCategory',
+    args: [BigInt(0)],
+    query: { enabled: !!statsData && totalCategories > 0 }
+  });
+
+  const { data: category1 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentCategory',
+    args: [BigInt(1)],
+    query: { enabled: !!statsData && totalCategories > 1 }
+  });
+
+  const { data: category2 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentCategory',
+    args: [BigInt(2)],
+    query: { enabled: !!statsData && totalCategories > 2 }
+  });
+
+  const { data: category3 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentCategory',
+    args: [BigInt(3)],
+    query: { enabled: !!statsData && totalCategories > 3 }
+  });
+
+  const { data: category4 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentCategory',
+    args: [BigInt(4)],
+    query: { enabled: !!statsData && totalCategories > 4 }
+  });
+
+  const { data: category5 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentCategory',
+    args: [BigInt(5)],
+    query: { enabled: !!statsData && totalCategories > 5 }
+  });
+
+  // Query authors
+  const { data: author0 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentAuthor',
+    args: [BigInt(0)],
+    query: { enabled: !!statsData && totalAuthors > 0 }
+  });
+
+  const { data: author1 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentAuthor',
+    args: [BigInt(1)],
+    query: { enabled: !!statsData && totalAuthors > 1 }
+  });
+
+  const { data: author2 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentAuthor',
+    args: [BigInt(2)],
+    query: { enabled: !!statsData && totalAuthors > 2 }
+  });
+
+  const { data: author3 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentAuthor',
+    args: [BigInt(3)],
+    query: { enabled: !!statsData && totalAuthors > 3 }
+  });
+
+  const { data: author4 } = useReadContract({
+    address: CONTRACT_ADDRESSES.CONTENT_MATRIX,
+    abi: CONTENT_MATRIX_ABI,
+    functionName: 'getContentAuthor',
+    args: [BigInt(4)],
+    query: { enabled: !!statsData && totalAuthors > 4 }
+  });
 
   // Create content item
   const { writeContract: writeCreateContent, data: createContentHash, isPending: isCreatingContent } = useWriteContract();
@@ -155,13 +277,13 @@ export function useContentMatrix() {
     }
   }, [statsData]);
 
-  // Process content items dynamically
+  // Process content items
   useEffect(() => {
     const items: ContentItemData[] = [];
+    const contentDataArray = [content0, content1, content2, content3, content4, content5, content6, content7];
     
-    contentQueries.forEach((query, index) => {
-      if (query.data && Array.isArray(query.data)) {
-        const contentData = query.data;
+    contentDataArray.forEach((contentData, index) => {
+      if (contentData && Array.isArray(contentData)) {
         items.push({
           id: index,
           title: FHEUtils.decryptString(String(contentData[0])),
@@ -188,15 +310,15 @@ export function useContentMatrix() {
     });
     
     setContentItems(items);
-  }, [contentQueries]);
+  }, [content0, content1, content2, content3, content4, content5, content6, content7]);
 
-  // Process categories dynamically
+  // Process categories
   useEffect(() => {
     const cats: ContentCategoryData[] = [];
+    const categoryDataArray = [category0, category1, category2, category3, category4, category5];
     
-    categoryQueries.forEach((query, index) => {
-      if (query.data && Array.isArray(query.data)) {
-        const categoryData = query.data;
+    categoryDataArray.forEach((categoryData, index) => {
+      if (categoryData && Array.isArray(categoryData)) {
         cats.push({
           id: index,
           name: FHEUtils.decryptString(String(categoryData[0])),
@@ -215,15 +337,15 @@ export function useContentMatrix() {
     });
     
     setCategories(cats);
-  }, [categoryQueries]);
+  }, [category0, category1, category2, category3, category4, category5]);
 
-  // Process authors dynamically
+  // Process authors
   useEffect(() => {
     const auths: ContentAuthorData[] = [];
+    const authorDataArray = [author0, author1, author2, author3, author4];
     
-    authorQueries.forEach((query, index) => {
-      if (query.data && Array.isArray(query.data)) {
-        const authorData = query.data;
+    authorDataArray.forEach((authorData, index) => {
+      if (authorData && Array.isArray(authorData)) {
         auths.push({
           id: index,
           name: FHEUtils.decryptString(String(authorData[0])),
@@ -245,7 +367,7 @@ export function useContentMatrix() {
     });
     
     setAuthors(auths);
-  }, [authorQueries]);
+  }, [author0, author1, author2, author3, author4]);
 
   // Create content function
   const createContent = async (contentData: any) => {
