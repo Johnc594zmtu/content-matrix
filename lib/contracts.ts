@@ -3,8 +3,8 @@ import { getContractAddress } from '@/config/environment';
 
 // Contract addresses - these should be set after deployment
 export const CONTRACT_ADDRESSES = {
-  CONTENT_MATRIX: (process.env.NEXT_PUBLIC_CONTENT_MATRIX_ADDRESS || '0x3CAc5884cBd786A987cc4F53D061B63B4896F988') as Address,
-  CONTENT_PROTECTION: (process.env.NEXT_PUBLIC_CONTENT_PROTECTION_ADDRESS || '0x418bE3532aed25e405Ce1d81A333Abc62E0D3421') as Address,
+  CONTENT_MATRIX: (process.env.NEXT_PUBLIC_CONTENT_MATRIX_ADDRESS || '0x87eDC3c5A3Ec226426f2fB18b89b057C8cE8c73F') as Address,
+  CONTENT_PROTECTION: (process.env.NEXT_PUBLIC_CONTENT_PROTECTION_ADDRESS || '0xF646b05b6281C030b00aaA23f288F92a5C520858') as Address,
 } as const;
 
 // Content Matrix Contract ABI

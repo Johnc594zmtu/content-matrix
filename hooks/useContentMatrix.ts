@@ -190,8 +190,8 @@ export function useContentMatrix() {
         shareCount: FHEUtils.decryptNumber(String(content0[12])) || 0,
         downloadCount: FHEUtils.decryptNumber(String(content0[13])) || 0,
         contentMatrix: String(content0[14]),
-        isPublic: content0[15],
-        isActive: content0[16],
+        isPublic: Boolean(content0[15]),
+        isActive: Boolean(content0[16]),
         creationTime: Number(content0[17]),
         lastUpdated: Number(content0[18]),
       });
@@ -215,8 +215,8 @@ export function useContentMatrix() {
         shareCount: FHEUtils.decryptNumber(String(content1[12])) || 0,
         downloadCount: FHEUtils.decryptNumber(String(content1[13])) || 0,
         contentMatrix: String(content1[14]),
-        isPublic: content1[15],
-        isActive: content1[16],
+        isPublic: Boolean(content1[15]),
+        isActive: Boolean(content1[16]),
         creationTime: Number(content1[17]),
         lastUpdated: Number(content1[18]),
       });
@@ -287,7 +287,7 @@ export function useContentMatrix() {
         contentCount: FHEUtils.decryptNumber(String(category0[6])) || 0,
         subcategoryCount: FHEUtils.decryptNumber(String(category0[7])) || 0,
         hash: String(category0[8]) || '0x0000000000000000000000000000000000000000000000000000000000000000',
-        isActive: category0[9] || true,
+        isActive: Boolean(category0[9]) || true,
         creationTime: Number(category0[10]) || Math.floor((Date.now() - 86400000) / 1000),
         lastUpdated: Number(category0[11]) || Math.floor((Date.now() - 3600000) / 1000),
       });
@@ -306,7 +306,7 @@ export function useContentMatrix() {
         contentCount: FHEUtils.decryptNumber(String(category1[6])) || 0,
         subcategoryCount: FHEUtils.decryptNumber(String(category1[7])) || 0,
         hash: String(category1[8]) || '0x0000000000000000000000000000000000000000000000000000000000000000',
-        isActive: category1[9] || true,
+        isActive: Boolean(category1[9]) || true,
         creationTime: Number(category1[10]) || Math.floor((Date.now() - 172800000) / 1000),
         lastUpdated: Number(category1[11]) || Math.floor((Date.now() - 7200000) / 1000),
       });
@@ -325,7 +325,7 @@ export function useContentMatrix() {
         contentCount: FHEUtils.decryptNumber(String(category2[6])) || 0,
         subcategoryCount: FHEUtils.decryptNumber(String(category2[7])) || 0,
         hash: String(category2[8]) || '0x0000000000000000000000000000000000000000000000000000000000000000',
-        isActive: category2[9] || true,
+        isActive: Boolean(category2[9]) || true,
         creationTime: Number(category2[10]) || Math.floor((Date.now() - 259200000) / 1000),
         lastUpdated: Number(category2[11]) || Math.floor((Date.now() - 10800000) / 1000),
       });
@@ -353,8 +353,8 @@ export function useContentMatrix() {
         followerCount: FHEUtils.decryptNumber(String(author0[7])) || 0,
         rating: FHEUtils.decryptNumber(String(author0[8])) || 0,
         status: FHEUtils.decryptString(String(author0[9])),
-        isVerified: author0[10],
-        isActive: author0[11],
+        isVerified: Boolean(author0[10]),
+        isActive: Boolean(author0[11]),
         creationTime: Number(author0[12]),
         lastUpdated: Number(author0[13]),
       });
